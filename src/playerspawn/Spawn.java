@@ -1,9 +1,9 @@
 package it.menzani.bts.playerspawn;
 
-public class Spawn {
-    public final int x, y, z;
+class Spawn {
+    final int x, y, z;
 
-    public Spawn(int x, int y, int z) {
+    Spawn(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;

@@ -1,18 +1,17 @@
-package it.menzani.bts.playerspawn.database;
+package it.menzani.bts.playerspawn;
 
 import it.menzani.bts.datastore.wrapper.SQLDatabaseCallable;
-import it.menzani.bts.playerspawn.Spawn;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class GetSpawn implements SQLDatabaseCallable {
+class GetSpawn implements SQLDatabaseCallable {
     private final PreparedStatement preparedStatement;
     private final UUID playerId;
 
-    public GetSpawn(PreparedStatement preparedStatement, UUID playerId) {
+    GetSpawn(PreparedStatement preparedStatement, UUID playerId) {
         this.preparedStatement = preparedStatement;
         this.playerId = playerId;
     }

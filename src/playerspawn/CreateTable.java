@@ -1,11 +1,11 @@
-package it.menzani.bts.playerspawn.database;
+package it.menzani.bts.playerspawn;
 
 import it.menzani.bts.datastore.wrapper.SQLDatabaseRunnable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class CreateTable implements SQLDatabaseRunnable {
+class CreateTable implements SQLDatabaseRunnable {
     @Override
     public void run(Object connection) throws SQLException {
         Connection sqlConnection = (Connection) connection;

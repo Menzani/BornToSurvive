@@ -1,4 +1,4 @@
-package it.menzani.bts.playerspawn.database;
+package it.menzani.bts.playerspawn;
 
 import it.menzani.bts.datastore.wrapper.SQLDatabaseCallable;
 
@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PrepareStatements implements SQLDatabaseCallable {
+class PrepareStatements implements SQLDatabaseCallable {
     @Override
     public PreparedStatement[] call(Object connection) throws SQLException {
         Connection sqlConnection = (Connection) connection;
