@@ -40,7 +40,7 @@ public class WrappedSQLDatabase implements Closeable {
 
     public Object submit(SQLDatabaseCallable callable, Component component) {
         if (isConnectionNotAvailable()) {
-            throw new IllegalStateException("Database connection is not available." +
+            throw new IllegalStateException("Database connection is not available. " +
                     "Always check with #isConnectionNotAvailable() before calling this method.");
         }
         Object result;
@@ -69,6 +69,7 @@ public class WrappedSQLDatabase implements Closeable {
 
     @Override
     public void close() {
+        if (isConnectionNotAvailable()) return;
         try {
             connection.close();
         } catch (SQLException e) {
