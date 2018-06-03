@@ -30,10 +30,12 @@ public class BornToSurvive extends JavaPlugin {
         database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), getLogger());
         if (database.isConnectionNotAvailable()) return;
 
-        Component playerSpawn = new PlayerSpawn(this);
-        playerSpawn.load();
-        Component playerMessages = new PlayerMessages(this);
-        playerMessages.load();
+        final Component[] components = {
+                new PlayerSpawn(this),
+                new PlayerMessages(this)};
+        for (Component component : components) {
+            component.load();
+        }
     }
 
     @Override
