@@ -3,6 +3,7 @@ package it.menzani.bts;
 import it.menzani.bts.config.MainConfiguration;
 import it.menzani.bts.datastore.impl.PostgreSQLDatabase;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
+import it.menzani.bts.playermessages.PlayerMessages;
 import it.menzani.bts.playerspawn.PlayerSpawn;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -31,6 +32,8 @@ public class BornToSurvive extends JavaPlugin {
 
         Component playerSpawn = new PlayerSpawn(this);
         playerSpawn.load();
+        Component playerMessages = new PlayerMessages(this);
+        playerMessages.load();
     }
 
     @Override
