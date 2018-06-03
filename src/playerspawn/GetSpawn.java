@@ -1,5 +1,6 @@
 package it.menzani.bts.playerspawn;
 
+import it.menzani.bts.Component;
 import it.menzani.bts.datastore.wrapper.SQLDatabaseCallable;
 
 import java.sql.PreparedStatement;
@@ -17,7 +18,7 @@ class GetSpawn implements SQLDatabaseCallable {
     }
 
     @Override
-    public Spawn call(Object connection) throws SQLException {
+    public Spawn call(Object connection, Component component) throws SQLException {
         preparedStatement.setObject(1, playerId);
         ResultSet resultSet = preparedStatement.executeQuery();
         boolean validRow = resultSet.next();

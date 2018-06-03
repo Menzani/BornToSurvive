@@ -45,7 +45,7 @@ public class WrappedSQLDatabase implements Closeable {
         }
         Object result;
         try {
-            result = callable.call(connection);
+            result = callable.call(connection, component);
         } catch (SQLException e) {
             String errorMessage = callable.getErrorMessage();
             if (errorMessage == null) throw new NullPointerException("callable#getErrorMessage() must not be null.");

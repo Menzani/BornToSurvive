@@ -4,7 +4,7 @@ public interface Component {
     void load();
 
     default String getName() {
-        return getClass().getName();
+        return getClass().getSimpleName();
     }
 
     default String getTag() {
