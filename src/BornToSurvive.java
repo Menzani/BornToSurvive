@@ -1,6 +1,6 @@
 package it.menzani.bts;
 
-import it.menzani.bts.datastore.DatabaseCredentials;
+import it.menzani.bts.config.MainConfiguration;
 import it.menzani.bts.datastore.impl.PostgreSQLDatabase;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
 import it.menzani.bts.playerspawn.PlayerSpawn;
@@ -9,10 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BornToSurvive extends JavaPlugin {
-    private static final DatabaseCredentials DATABASE_CREDENTIALS =
-            new DatabaseCredentials(null, null, null, null);
-
+    private MainConfiguration mainConfiguration;
     private WrappedSQLDatabase database;
+
+    public MainConfiguration getMainConfiguration() {
+        return mainConfiguration;
+    }
 
     public WrappedSQLDatabase getDatabase() {
         return database;
@@ -20,7 +22,11 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        database = new WrappedSQLDatabase(new PostgreSQLDatabase(DATABASE_CREDENTIALS), getLogger());
+        mainConfiguration = new MainConfiguration(this);
+        boolean invalid = mainConfiguration.validate();
+        if (invalid) return;
+
+        database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), getLogger());
         if (database.isConnectionNotAvailable()) return;
 
         Component playerSpawn = new PlayerSpawn(this);
