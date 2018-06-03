@@ -1,25 +1,23 @@
 package it.menzani.bts.playerspawn;
 
 import it.menzani.bts.BornToSurvive;
-import it.menzani.bts.Component;
+import it.menzani.bts.ListenerComponent;
 import it.menzani.bts.datastore.wrapper.DatabaseCallable;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.sql.PreparedStatement;
 
-public class PlayerSpawn implements Component, Listener {
-    private final BornToSurvive bornToSurvive;
+public class PlayerSpawn extends ListenerComponent {
     private final PreparedStatement setSpawnStatement, getSpawnStatement;
 
     public PlayerSpawn(BornToSurvive bornToSurvive) {
-        this.bornToSurvive = bornToSurvive;
+        super(bornToSurvive);
         WrappedSQLDatabase database = bornToSurvive.getDatabase();
 
         PreparedStatement[] preparedStatements =
@@ -35,16 +33,12 @@ public class PlayerSpawn implements Component, Listener {
         database.execute(new CreateTable(), this);
     }
 
-    @Override
-    public void load() {
-        bornToSurvive.registerListener(this);
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Location location = player.getLocation();
 
+        BornToSurvive bornToSurvive = getBornToSurvive();
         Integer updateCount = (Integer) bornToSurvive.getDatabase().submit(new SetSpawn(setSpawnStatement,
                 player.getUniqueId(), new Spawn(location.getBlockX(), location.getBlockY(), location.getBlockZ())), this);
         if (updateCount == null) return;
@@ -71,6 +65,7 @@ public class PlayerSpawn implements Component, Listener {
         }
         Player player = event.getPlayer();
 
+        BornToSurvive bornToSurvive = getBornToSurvive();
         Object result = bornToSurvive.getDatabase().submit(new GetSpawn(getSpawnStatement, player.getUniqueId()), this);
         if (result == null) return;
 

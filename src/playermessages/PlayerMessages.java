@@ -1,23 +1,15 @@
 package it.menzani.bts.playermessages;
 
 import it.menzani.bts.BornToSurvive;
-import it.menzani.bts.Component;
+import it.menzani.bts.ListenerComponent;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerMessages implements Component, Listener {
-    private final BornToSurvive bornToSurvive;
-
+public class PlayerMessages extends ListenerComponent {
     public PlayerMessages(BornToSurvive bornToSurvive) {
-        this.bornToSurvive = bornToSurvive;
-    }
-
-    @Override
-    public void load() {
-        bornToSurvive.registerListener(this);
+        super(bornToSurvive);
     }
 
     @EventHandler
