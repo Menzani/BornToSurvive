@@ -2,11 +2,10 @@ package it.menzani.bts.config;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.datastore.DatabaseCredentials;
+import it.menzani.logger.api.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
-
-import java.util.logging.Logger;
 
 public class MainConfiguration {
     private final FileConfiguration config;
@@ -17,7 +16,7 @@ public class MainConfiguration {
 
         config = bornToSurvive.getConfig();
         config.setDefaults(new MemoryConfiguration()); // Do not use embedded config.yml as a default.
-        logger = bornToSurvive.getLogger();
+        logger = bornToSurvive.getRootLogger();
     }
 
     private DatabaseCredentials databaseCredentials;
@@ -31,7 +30,7 @@ public class MainConfiguration {
         databaseCredentials = validateDatabase(validation);
 
         if (validation.isSuccessful()) return false;
-        logger.severe("config.yml - " + validation);
+        logger.fatal("config.yml - " + validation);
         return true;
     }
 

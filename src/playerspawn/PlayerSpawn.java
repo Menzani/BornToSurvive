@@ -55,7 +55,7 @@ public class PlayerSpawn extends ListenerComponent {
                         System.lineSeparator() + "player=" + player;
                 break;
         }
-        if (warning != null) bornToSurvive.getLogger().warning(warning);
+        if (warning != null) bornToSurvive.getRootLogger().warn(warning);
     }
 
     @EventHandler
@@ -70,7 +70,7 @@ public class PlayerSpawn extends ListenerComponent {
         if (result == null) return;
 
         if (result == DatabaseCallable.NULL) {
-            bornToSurvive.getLogger().severe("Player spawn is not stored." + System.lineSeparator() + "player=" + player);
+            bornToSurvive.getRootLogger().fatal("Player spawn is not stored." + System.lineSeparator() + "player=" + player);
         } else {
             Spawn spawn = (Spawn) result;
             event.setRespawnLocation(new Location(bornToSurvive.getOverworld(), spawn.x + 0.5, spawn.y, spawn.z + 0.5));
