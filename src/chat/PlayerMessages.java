@@ -1,7 +1,7 @@
 package it.menzani.bts.chat;
 
 import it.menzani.bts.BornToSurvive;
-import it.menzani.bts.ListenerComponent;
+import it.menzani.bts.SimpleComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -9,7 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class PlayerMessages extends ListenerComponent {
+public class PlayerMessages extends SimpleComponent {
     public PlayerMessages(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
     }

@@ -1,7 +1,7 @@
 package it.menzani.bts.playerspawn;
 
 import it.menzani.bts.BornToSurvive;
-import it.menzani.bts.ListenerComponent;
+import it.menzani.bts.SimpleComponent;
 import it.menzani.bts.datastore.wrapper.DatabaseCallable;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
 import org.bukkit.Location;
@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.sql.PreparedStatement;
 
-public class PlayerSpawn extends ListenerComponent {
+public class PlayerSpawn extends SimpleComponent {
     private final PreparedStatement setSpawnStatement, getSpawnStatement;
 
     public PlayerSpawn(BornToSurvive bornToSurvive) {
