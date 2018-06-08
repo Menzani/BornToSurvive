@@ -1,8 +1,8 @@
 package it.menzani.bts.logging;
 
+import it.menzani.logger.Pipeline;
 import it.menzani.logger.api.Logger;
-import it.menzani.logger.impl.FileConsumer;
-import it.menzani.logger.impl.SynchronousLogger;
+import it.menzani.logger.impl.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,8 +30,11 @@ public class LoggerBuilder {
     }
 
     public Logger build() {
-        return new SynchronousLogger()
-                .setConsumers(new LoggerConsumer(pluginLogger), new FileConsumer(logFile))
-                .setFormatter(new LevelFormatter());
+        LoggerSet loggerSet = new LoggerSet();
+        loggerSet.add(new SynchronousLogger().setPipelines(
+                new Pipeline().addConsumer(new JavaLoggerConsumer(pluginLogger))));
+        loggerSet.add(new AsynchronousLogger().setPipelines(
+                Pipeline.newConsoleLocalPipeline().setConsumers(new FileConsumer(logFile))));
+        return loggerSet;
     }
 }
