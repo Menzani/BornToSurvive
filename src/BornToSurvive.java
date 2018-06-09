@@ -4,7 +4,7 @@ import it.menzani.bts.chat.PlayerMessages;
 import it.menzani.bts.config.MainConfiguration;
 import it.menzani.bts.datastore.impl.PostgreSQLDatabase;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
-import it.menzani.bts.logging.LoggerBuilder;
+import it.menzani.bts.logging.LoggerFactory;
 import it.menzani.bts.playerspawn.PlayerSpawn;
 import it.menzani.logger.api.Logger;
 import org.bukkit.World;
@@ -35,10 +35,10 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        LoggerBuilder builder = new LoggerBuilder(LOG_FILE, getLogger());
+        LoggerFactory builder = new LoggerFactory(LOG_FILE, getLogger());
         boolean failure = builder.createLogFolder();
         if (failure) return;
-        logger = builder.build();
+        logger = builder.createLogger();
 
         mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();

@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class LoggerBuilder {
+public class LoggerFactory {
     private final Path logFile;
     private final java.util.logging.Logger pluginLogger;
 
-    public LoggerBuilder(Path logFile, java.util.logging.Logger pluginLogger) {
+    public LoggerFactory(Path logFile, java.util.logging.Logger pluginLogger) {
         this.logFile = logFile;
         this.pluginLogger = pluginLogger;
     }
@@ -29,7 +29,7 @@ public class LoggerBuilder {
         }
     }
 
-    public Logger build() {
+    public Logger createLogger() {
         LoggerSet loggerSet = new LoggerSet();
         loggerSet.add(new SynchronousLogger().setPipelines(
                 new Pipeline().addConsumer(new JavaLoggerConsumer(pluginLogger))));
