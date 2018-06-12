@@ -32,7 +32,10 @@ public class PlayerMessages extends SimpleComponent {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
+        String deathMessage = event.getDeathMessage();
         event.setDeathMessage(null);
+        Player player = event.getEntity();
+        player.sendMessage(deathMessage);
     }
 
     @EventHandler
