@@ -8,8 +8,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.sql.PreparedStatement;
 
@@ -34,9 +34,9 @@ public class PlayerSpawn extends SimpleComponent {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerSpawnLocation(PlayerSpawnLocationEvent event) {
         Player player = event.getPlayer();
-        Location location = player.getLocation();
+        Location location = event.getSpawnLocation();
 
         BornToSurvive bornToSurvive = getBornToSurvive();
         Integer updateCount = (Integer) bornToSurvive.getDatabase().submit(new SetSpawn(setSpawnStatement,
