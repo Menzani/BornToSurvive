@@ -30,11 +30,12 @@ public class LoggerFactory {
     }
 
     public Logger createLogger() {
-        LoggerSet loggerSet = new LoggerSet();
-        loggerSet.add(new SynchronousLogger().setPipelines(
-                new Pipeline().addConsumer(new JavaLoggerConsumer(pluginLogger))));
-        loggerSet.add(new AsynchronousLogger().setPipelines(
-                Pipeline.newConsoleLocalPipeline().setConsumers(new FileConsumer(logFile))));
-        return loggerSet;
+        LoggerGroup loggerGroup = new LoggerGroup();
+        loggerGroup.addLogger(new SynchronousLogger().addPipeline(new Pipeline()
+                .addConsumer(new JavaLoggerConsumer(pluginLogger))));
+        loggerGroup.addLogger(new AsynchronousLogger().addPipeline(new Pipeline()
+                .setFormatter(new TimestampFormatter())
+                .addConsumer(new FileConsumer(logFile))));
+        return loggerGroup;
     }
 }

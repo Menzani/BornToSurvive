@@ -49,7 +49,7 @@ public class WrappedSQLDatabase implements Closeable {
         } catch (SQLException e) {
             String errorMessage = callable.getErrorMessage();
             if (errorMessage == null) throw new NullPointerException("callable#getErrorMessage() must not be null.");
-            logger.fatal(component.getTag() + errorMessage);
+            component.getLogger().fatal(errorMessage);
             e.printStackTrace();
             return null;
         }
@@ -57,7 +57,7 @@ public class WrappedSQLDatabase implements Closeable {
             CheckedSQLDatabaseCallable checkedCallable = (CheckedSQLDatabaseCallable) callable;
             String warningMessage = checkedCallable.doPostCheck(result);
             if (warningMessage != null) {
-                logger.warn(component.getTag() + warningMessage);
+                component.getLogger().warn(warningMessage);
                 return null;
             }
         }

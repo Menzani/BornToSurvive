@@ -58,7 +58,7 @@ public class PlayerMessages extends SimpleComponent {
         try {
             recipients.retainAll(nearbyPlayers);
         } catch (UnsupportedOperationException e) {
-            getBornToSurvive().getRootLogger().fatal("Could not modify the recipients of a chat message." +
+            getLogger().fatal("Could not modify the recipients of a chat message." +
                     System.lineSeparator() + "player=" + player + ", recipients=" + recipients + ", message='" + event.getMessage() + '\'');
             e.printStackTrace();
         }

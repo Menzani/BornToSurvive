@@ -38,8 +38,7 @@ public class PlayerSpawn extends SimpleComponent {
         Player player = event.getPlayer();
         Location location = event.getSpawnLocation();
 
-        BornToSurvive bornToSurvive = getBornToSurvive();
-        Integer updateCount = (Integer) bornToSurvive.getDatabase().submit(new SetSpawn(setSpawnStatement,
+        Integer updateCount = (Integer) getBornToSurvive().getDatabase().submit(new SetSpawn(setSpawnStatement,
                 player.getUniqueId(), new Spawn(location.getBlockX(), location.getBlockY(), location.getBlockZ())), this);
         if (updateCount == null) return;
 
@@ -55,7 +54,7 @@ public class PlayerSpawn extends SimpleComponent {
                         System.lineSeparator() + "player=" + player;
                 break;
         }
-        if (warning != null) bornToSurvive.getRootLogger().warn(warning);
+        if (warning != null) getLogger().warn(warning);
     }
 
     @EventHandler
@@ -70,7 +69,7 @@ public class PlayerSpawn extends SimpleComponent {
         if (result == null) return;
 
         if (result == DatabaseCallable.NULL) {
-            bornToSurvive.getRootLogger().fatal("Player spawn is not stored." + System.lineSeparator() + "player=" + player);
+            getLogger().fatal("Player spawn is not stored." + System.lineSeparator() + "player=" + player);
         } else {
             Spawn spawn = (Spawn) result;
             event.setRespawnLocation(new Location(bornToSurvive.getOverworld(), spawn.x + 0.5, spawn.y, spawn.z + 0.5));

@@ -1,5 +1,9 @@
 package it.menzani.bts;
 
+import it.menzani.logger.Pipeline;
+import it.menzani.logger.api.Logger;
+import it.menzani.logger.api.PipelineLogger;
+import it.menzani.logger.impl.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,10 +16,23 @@ import java.util.Set;
 
 public abstract class SimpleComponent implements Component, Listener, CommandExecutor {
     private final BornToSurvive bornToSurvive;
+    private final Logger logger;
     private final Set<Command> playerOnlyCommands = new HashSet<>();
 
     protected SimpleComponent(BornToSurvive bornToSurvive) {
         this.bornToSurvive = bornToSurvive;
+
+        LoggerGroup loggerGroup = ((LoggerGroup) bornToSurvive.getRootLogger()).clone();
+        MessageFormatter formatter = new TagFormatter(getName());
+        firstPipeline(loggerGroup, 0).setFormatter(formatter);
+        firstPipeline(loggerGroup, 1).setFormatter(new TimestampFormatter(new LevelFormatter(formatter)));
+        logger = loggerGroup;
+    }
+
+    private static Pipeline firstPipeline(LoggerGroup loggerGroup, int index) {
+        assert index == 0 || index == 1;
+        PipelineLogger logger = (PipelineLogger) loggerGroup.getLoggers().get(index);
+        return logger.getPipelines().get(0);
     }
 
     protected BornToSurvive getBornToSurvive() {
@@ -48,8 +65,8 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
     }
 
     @Override
-    public String getTag() {
-        return '[' + getName() + "] ";
+    public Logger getLogger() {
+        return logger;
     }
 
     @Override
