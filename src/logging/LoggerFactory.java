@@ -23,7 +23,7 @@ public class LoggerFactory {
             Files.createDirectories(logFolder);
             return false;
         } catch (IOException e) {
-            System.err.println("Could not create log folder.");
+            pluginLogger.severe("Could not create log folder.");
             e.printStackTrace();
             return true;
         }

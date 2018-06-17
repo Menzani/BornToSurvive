@@ -6,6 +6,7 @@ import it.menzani.bts.datastore.impl.PostgreSQLDatabase;
 import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
 import it.menzani.bts.logging.LoggerFactory;
 import it.menzani.bts.minecartspeed.MinecartSpeed;
+import it.menzani.bts.optimize.Optimize;
 import it.menzani.bts.playerspawn.PlayerSpawn;
 import it.menzani.logger.api.Logger;
 import org.bukkit.World;
@@ -19,15 +20,10 @@ public class BornToSurvive extends JavaPlugin {
     private static final Path LOG_FILE = Paths.get("logs", "bts", "bts.log");
 
     private Logger logger;
-    private MainConfiguration mainConfiguration;
     private WrappedSQLDatabase database;
 
     public Logger getRootLogger() {
         return logger;
-    }
-
-    public MainConfiguration getMainConfiguration() {
-        return mainConfiguration;
     }
 
     public WrappedSQLDatabase getDatabase() {
@@ -41,7 +37,7 @@ public class BornToSurvive extends JavaPlugin {
         if (failure) return;
         logger = builder.createLogger();
 
-        mainConfiguration = new MainConfiguration(this);
+        MainConfiguration mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();
         if (invalid) return;
 
@@ -51,7 +47,8 @@ public class BornToSurvive extends JavaPlugin {
         final Component[] components = {
                 new PlayerSpawn(this),
                 new PlayerMessages(this),
-                new MinecartSpeed(this)
+                new MinecartSpeed(this),
+                new Optimize(this)
         };
         for (Component component : components) {
             component.load();
