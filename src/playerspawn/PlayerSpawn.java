@@ -46,7 +46,7 @@ public class PlayerSpawn extends SimpleComponent {
         String warning = null;
         switch (updateCount) {
             case 0:
-                if (!hasPlayedBefore) warning = "Did not store spawn for player that has never played before." +
+                if (!hasPlayedBefore) warning = "Spawn is stored for player that has never played before." +
                         System.lineSeparator() + "player=" + player;
                 break;
             case 1:

@@ -60,7 +60,9 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        database.close();
+        if (database != null) {
+            database.close();
+        }
     }
 
     public void registerListener(Listener listener) {

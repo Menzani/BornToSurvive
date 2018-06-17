@@ -50,7 +50,7 @@ public class PlayerMessages extends SimpleComponent {
 
     @EventHandler
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
-        event.setFormat(" %1$s " + ChatColor.WHITE + "%2$s");
+        event.setFormat(" %1$s " + ChatColor.RESET + "%2$s");
 
         Set<Player> recipients = event.getRecipients();
         Player player = event.getPlayer();
