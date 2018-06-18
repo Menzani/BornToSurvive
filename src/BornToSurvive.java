@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 public class BornToSurvive extends JavaPlugin {
     private static final Path LOG_FILE = Paths.get("logs", "bts", "bts.log");
@@ -30,29 +31,35 @@ public class BornToSurvive extends JavaPlugin {
         return database;
     }
 
-    @Override
-    public void onEnable() {
+    public BornToSurvive() {
         LoggerFactory builder = new LoggerFactory(LOG_FILE, getLogger());
         boolean failure = builder.createLogFolder();
         if (failure) return;
         logger = builder.createLogger();
+    }
+
+    @Override
+    public void onLoad() {
+        if (logger == null) return;
 
         MainConfiguration mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();
         if (invalid) return;
 
         database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), logger);
-        if (database.isConnectionNotAvailable()) return;
+    }
 
-        final Component[] components = {
+    @Override
+    public void onEnable() {
+        if (database == null || database.isConnectionNotAvailable()) return;
+
+        final Set<Component> components = Set.of(
                 new PlayerSpawn(this),
                 new PlayerMessages(this),
                 new MinecartSpeed(this),
                 new Optimize(this)
-        };
-        for (Component component : components) {
-            component.load();
-        }
+        );
+        components.forEach(Component::load);
     }
 
     @Override
@@ -62,7 +69,7 @@ public class BornToSurvive extends JavaPlugin {
         }
     }
 
-    public void registerListener(Listener listener) {
+    void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
     }
 

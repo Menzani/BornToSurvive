@@ -15,11 +15,13 @@ import java.time.Duration;
 import java.util.Set;
 
 public class PlayerMessages extends SimpleComponent {
+    private static final double NEARBY_PLAYER_DISTANCE = 160; // In blocks
+
     private final NearbyPlayersCache nearbyPlayersCache;
 
     public PlayerMessages(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
-        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive.getServer());
+        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive.getServer(), NEARBY_PLAYER_DISTANCE);
     }
 
     @Override

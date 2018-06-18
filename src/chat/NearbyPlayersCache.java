@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
 
 class NearbyPlayersCache extends BukkitRunnable {
     private final Server server;
+    private final double distance;
     private final Map<Player, Set<Player>> cache = new HashMap<>();
 
-    NearbyPlayersCache(Server server) {
+    NearbyPlayersCache(Server server, double distance) {
         this.server = server;
+        this.distance = Math.pow(distance, 2);
     }
 
     synchronized Set<Player> getNearbyPlayers(Player player) {
@@ -27,7 +29,8 @@ class NearbyPlayersCache extends BukkitRunnable {
         cache.clear();
         for (Player online : server.getOnlinePlayers()) {
             Set<Player> nearbyPlayers = online.getWorld().getPlayers().stream()
-                    .filter(player -> online.equals(player) || online.getLocation().distanceSquared(player.getLocation()) < 160 * 160)
+                    .filter(player -> online.equals(player) ||
+                            online.getLocation().distanceSquared(player.getLocation()) < distance)
                     .collect(Collectors.toSet());
             cache.put(online, nearbyPlayers);
         }
