@@ -1,13 +1,14 @@
 package it.menzani.bts;
 
-import it.menzani.bts.chat.PlayerMessages;
-import it.menzani.bts.config.MainConfiguration;
-import it.menzani.bts.datastore.impl.PostgreSQLDatabase;
-import it.menzani.bts.datastore.wrapper.WrappedSQLDatabase;
+import it.menzani.bts.components.Component;
+import it.menzani.bts.components.minecartspeed.MinecartSpeed;
+import it.menzani.bts.components.optimize.Optimize;
+import it.menzani.bts.components.playerchat.PlayerChat;
+import it.menzani.bts.components.playerspawn.PlayerSpawn;
+import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
-import it.menzani.bts.minecartspeed.MinecartSpeed;
-import it.menzani.bts.optimize.Optimize;
-import it.menzani.bts.playerspawn.PlayerSpawn;
+import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
+import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.logger.api.Logger;
 import org.bukkit.World;
 import org.bukkit.event.Listener;
@@ -55,7 +56,7 @@ public class BornToSurvive extends JavaPlugin {
 
         final Set<Component> components = Set.of(
                 new PlayerSpawn(this),
-                new PlayerMessages(this),
+                new PlayerChat(this),
                 new MinecartSpeed(this),
                 new Optimize(this)
         );
@@ -69,7 +70,7 @@ public class BornToSurvive extends JavaPlugin {
         }
     }
 
-    void registerListener(Listener listener) {
+    public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
