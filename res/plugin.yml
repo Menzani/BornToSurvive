@@ -3,3 +3,5 @@ author: System_
 version: 1.12.2
 main: it.menzani.bts.BornToSurvive
 load: STARTUP
+commands:
+  teleport:
