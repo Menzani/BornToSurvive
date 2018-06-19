@@ -1,13 +1,12 @@
 <component name="libraryTable">
   <library name="Spigot">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/spigot/spigot.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib/Spigot" />
     </CLASSES>
     <JAVADOC>
       <root url="https://hub.spigotmc.org/javadocs/spigot/" />
     </JAVADOC>
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/spigot/spigot.jar!/" />
-    </SOURCES>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/Spigot" recursive="false" />
   </library>
 </component>
