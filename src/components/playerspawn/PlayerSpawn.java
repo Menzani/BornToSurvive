@@ -64,15 +64,14 @@ public class PlayerSpawn extends SimpleComponent {
         }
         Player player = event.getPlayer();
 
-        BornToSurvive bornToSurvive = getBornToSurvive();
-        Object result = bornToSurvive.getDatabase().submit(new GetSpawn(getSpawnStatement, player.getUniqueId()), this);
+        Object result = getBornToSurvive().getDatabase().submit(new GetSpawn(getSpawnStatement, player.getUniqueId()), this);
         if (result == null) return;
 
         if (result == DatabaseCallable.NULL) {
             getLogger().fatal("Player spawn is not stored." + System.lineSeparator() + "player=" + player);
         } else {
             Spawn spawn = (Spawn) result;
-            event.setRespawnLocation(new Location(bornToSurvive.getOverworld(), spawn.x + 0.5, spawn.y, spawn.z + 0.5));
+            event.setRespawnLocation(new Location(getBornToSurvive().getOverworld(), spawn.x + 0.5, spawn.y, spawn.z + 0.5));
         }
     }
 }

@@ -7,10 +7,13 @@ import it.menzani.bts.components.playerchat.PlayerChat;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
+import it.menzani.bts.misc.User;
 import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.logger.api.Logger;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -76,5 +79,21 @@ public class BornToSurvive extends JavaPlugin {
 
     public World getOverworld() {
         return getServer().getWorlds().get(0);
+    }
+
+    public User getUser(String username, User target) {
+        Player player = getServer().getPlayer(username);
+        if (player == null) {
+            target.sendMessageFormat("Player not found.");
+            return null;
+        }
+        return new User(player);
+    }
+
+    public void broadcast(String message, Player... players) {
+        for (int i = 0; i < players.length; i++) {
+            message = message.replace('{' + Integer.toString(i + 1) + '}', players[i].getDisplayName() + ChatColor.RESET);
+        }
+        getServer().broadcastMessage(message);
     }
 }

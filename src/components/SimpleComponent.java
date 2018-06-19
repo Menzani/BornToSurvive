@@ -1,6 +1,7 @@
 package it.menzani.bts.components;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.misc.User;
 import it.menzani.logger.Pipeline;
 import it.menzani.logger.api.Logger;
 import it.menzani.logger.api.PipelineLogger;
@@ -75,7 +76,7 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
         String commandName = command.getName();
         if (playerOnlyCommands.contains(command)) {
             if (sender instanceof Player) {
-                onCommand(commandName, (Player) sender, args);
+                onCommand(commandName, new User((Player) sender), args);
             } else {
                 sender.sendMessage("This command can only be used by in-game players.");
             }
@@ -88,6 +89,6 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
     protected void onCommand(String command, CommandSender sender, String[] args) {
     }
 
-    protected void onCommand(String command, Player sender, String[] args) {
+    protected void onCommand(String command, User sender, String[] args) {
     }
 }
