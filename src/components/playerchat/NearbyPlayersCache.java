@@ -18,11 +18,15 @@ import java.util.stream.Collectors;
 
 class NearbyPlayersCache extends BukkitRunnable implements Listener {
     private final BornToSurvive bornToSurvive;
-    private final double distance;
+    private double distance;
     private final Map<Player, Set<Player>> cache = Collections.synchronizedMap(new HashMap<>());
 
     NearbyPlayersCache(BornToSurvive bornToSurvive, double distance) {
         this.bornToSurvive = bornToSurvive;
+        setDistance(distance);
+    }
+
+    void setDistance(double distance) {
         this.distance = Math.pow(distance, 2);
     }
 

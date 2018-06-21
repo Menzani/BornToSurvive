@@ -47,6 +47,11 @@ public class PlayerChat extends SimpleComponent {
 
         Player player = event.getPlayer();
         player.setDisplayName(ChatColor.YELLOW + player.getName());
+
+        if (!player.hasPlayedBefore()) {
+            nearbyPlayersCache.setDistance(Double.MAX_VALUE);
+            getBornToSurvive().broadcast("Welcome {1}!", player);
+        }
     }
 
     @EventHandler
