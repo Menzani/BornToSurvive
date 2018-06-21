@@ -80,7 +80,28 @@ public class BornToSurvive extends JavaPlugin {
     }
 
     public World getOverworld() {
-        return getServer().getWorlds().get(0);
+        return getServer().getWorld("world");
+    }
+
+    public World getNether() {
+        return getServer().getWorld("world_nether");
+    }
+
+    public World getTheEnd() {
+        return getServer().getWorld("world_the_end");
+    }
+
+    public World.Environment matchWorld(World world) {
+        if (world == getOverworld()) {
+            return World.Environment.NORMAL;
+        }
+        if (world == getNether()) {
+            return World.Environment.NETHER;
+        }
+        if (world == getTheEnd()) {
+            return World.Environment.THE_END;
+        }
+        throw new IllegalArgumentException("Unknown world.");
     }
 
     public User getUser(String username, User target) {

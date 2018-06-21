@@ -15,20 +15,21 @@ import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
-    private static final double NEARBY_PLAYER_DISTANCE = 160; // In blocks
+    private static final double NEARBY_PLAYER_DISTANCE = 10000; // In blocks
 
     private final NearbyPlayersCache nearbyPlayersCache;
 
     public PlayerChat(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
-        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive.getServer(), NEARBY_PLAYER_DISTANCE);
+        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive, NEARBY_PLAYER_DISTANCE);
     }
 
     @Override
     public void load() {
         super.load();
 
-        long period = TickDuration.from(Duration.ofSeconds(3));
+        getBornToSurvive().registerListener(nearbyPlayersCache);
+        long period = TickDuration.from(Duration.ofMinutes(1));
         nearbyPlayersCache.runTaskTimer(getBornToSurvive(), period, period);
     }
 
@@ -43,6 +44,9 @@ public class PlayerChat extends SimpleComponent {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
+
+        Player player = event.getPlayer();
+        player.setDisplayName(ChatColor.YELLOW + player.getName());
     }
 
     @EventHandler
