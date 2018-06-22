@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 import java.util.Set;
 
 public class BornToSurvive extends JavaPlugin {
-    private static final Path LOG_FILE = Paths.get("logs", "bts", "bts.log");
+    private static final Path logFile = Paths.get("logs", "bts", "bts.log");
 
     private Logger logger;
     private WrappedSQLDatabase database;
@@ -38,7 +38,7 @@ public class BornToSurvive extends JavaPlugin {
     }
 
     public BornToSurvive() {
-        LoggerFactory builder = new LoggerFactory(LOG_FILE, getLogger());
+        LoggerFactory builder = new LoggerFactory(logFile, getLogger());
         boolean failure = builder.createLogFolder();
         if (failure) return;
         logger = builder.createLogger();

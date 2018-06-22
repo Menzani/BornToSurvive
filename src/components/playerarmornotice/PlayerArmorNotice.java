@@ -14,7 +14,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class PlayerArmorNotice extends SimpleComponent {
-    private static final Set<Material> ARMOR_MATERIALS = EnumSet.of(
+    private static final Set<Material> armorMaterials = EnumSet.of(
             Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS,
             Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS,
             Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS,
@@ -30,7 +30,7 @@ public class PlayerArmorNotice extends SimpleComponent {
         if (event.isCancelled()) return;
         ItemStack item = event.getItem();
         Material type = item.getType();
-        if (!ARMOR_MATERIALS.contains(type)) return;
+        if (!armorMaterials.contains(type)) return;
         short maxDurability = type.getMaxDurability();
         float x = (float) item.getDurability() / maxDurability;
         if (Math.abs(x - 0.9F) > 0.5F / maxDurability) return;

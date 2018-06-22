@@ -28,12 +28,12 @@ import java.net.InetSocketAddress;
 import java.util.*;
 
 public class User implements Player {
-    private static final String MESSAGE_PREFIX = ChatColor.BLUE + "BTS> " + ChatColor.GRAY;
+    private static final String messagePrefix = ChatColor.BLUE + "BTS> " + ChatColor.GRAY;
 
     private final Player delegate;
 
     public User(Player delegate) {
-        this.delegate = delegate;
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
     }
 
     public void sendMessageFormat(String base, Object... important) {
@@ -44,7 +44,7 @@ public class User implements Player {
             }
             base = base.replace('{' + Integer.toString(i + 1) + '}', ChatColor.GREEN + object.toString() + ChatColor.GRAY);
         }
-        sendMessage(MESSAGE_PREFIX + base);
+        sendMessage(messagePrefix + base);
     }
 
     @Override

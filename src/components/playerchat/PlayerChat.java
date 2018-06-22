@@ -15,13 +15,13 @@ import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
-    private static final double NEARBY_PLAYER_DISTANCE = 10000; // In blocks
+    private static final double nearbyPlayersDistance = 10000; // In blocks
 
     private final NearbyPlayersCache nearbyPlayersCache;
 
     public PlayerChat(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
-        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive, NEARBY_PLAYER_DISTANCE);
+        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive, nearbyPlayersDistance);
     }
 
     @Override

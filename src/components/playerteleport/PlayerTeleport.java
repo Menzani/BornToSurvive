@@ -82,7 +82,7 @@ public class PlayerTeleport extends SimpleComponent {
             }
             PlayerInventory inventory = sender.getInventory();
             if (!new Ticket(inventory.getItemInMainHand()).check() && !new Ticket(inventory.getItemInOffHand()).check()) {
-                sender.sendMessageFormat("You must hold a " + Ticket.NAME + '.');
+                sender.sendMessageFormat("You must be holding a " + Ticket.name + '.');
                 return;
             }
             requests.put(target, sender);

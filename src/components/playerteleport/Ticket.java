@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 class Ticket {
-    static final String NAME = ChatColor.RESET + "Teleportation Ticket";
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    static final String name = ChatColor.RESET + "Teleportation Ticket";
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
     private final ItemStack stack;
     private ItemMeta meta;
@@ -21,7 +21,7 @@ class Ticket {
     Ticket() {
         this(new ItemStack(Material.PAPER));
         meta = stack.getItemMeta();
-        meta.setDisplayName(NAME);
+        meta.setDisplayName(name);
         stack.setItemMeta(meta);
     }
 
@@ -36,18 +36,18 @@ class Ticket {
     boolean check() {
         if (stack == null || !stack.hasItemMeta()) return false;
         meta = stack.getItemMeta();
-        return meta.hasDisplayName() && meta.getDisplayName().equals(NAME);
+        return meta.hasDisplayName() && meta.getDisplayName().equals(name);
     }
 
     void mark() {
         ZonedDateTime expiryDate = now().plusHours(12);
-        meta.setLore(List.of("", ChatColor.RESET + "Valid until " + expiryDate.format(FORMATTER)));
+        meta.setLore(List.of("", ChatColor.RESET + "Valid until " + expiryDate.format(dateTimeFormatter)));
         stack.setItemMeta(meta);
     }
 
     boolean validate(User sender, User target) {
         String validUntil = meta.getLore().get(1).substring(14);
-        ZonedDateTime expiryDate = ZonedDateTime.parse(validUntil, FORMATTER);
+        ZonedDateTime expiryDate = ZonedDateTime.parse(validUntil, dateTimeFormatter);
         if (expiryDate.isBefore(now())) {
             sender.sendMessageFormat("The ticket has expired.");
             target.sendMessageFormat("Your ticket has expired.");

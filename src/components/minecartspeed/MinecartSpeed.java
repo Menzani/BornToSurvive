@@ -13,7 +13,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class MinecartSpeed extends SimpleComponent {
-    private static final Set<EntityType> VEHICLE_TYPES = EnumSet.of(EntityType.MINECART, EntityType.MINECART_CHEST);
+    private static final Set<EntityType> minecartEntityTypes = EnumSet.of(EntityType.MINECART, EntityType.MINECART_CHEST);
 
     public MinecartSpeed(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
@@ -23,7 +23,7 @@ public class MinecartSpeed extends SimpleComponent {
     public void onVehicleCreate(VehicleCreateEvent event) {
         if (event.isCancelled()) return;
         Vehicle vehicle = event.getVehicle();
-        if (!VEHICLE_TYPES.contains(vehicle.getType())) return;
+        if (!minecartEntityTypes.contains(vehicle.getType())) return;
         Minecart minecart = (Minecart) vehicle;
         minecart.setMaxSpeed(1.5);
     }
