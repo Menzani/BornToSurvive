@@ -3,6 +3,7 @@ package it.menzani.bts;
 import it.menzani.bts.components.Component;
 import it.menzani.bts.components.minecartspeed.MinecartSpeed;
 import it.menzani.bts.components.optimize.Optimize;
+import it.menzani.bts.components.playerarmornotice.PlayerArmorNotice;
 import it.menzani.bts.components.playerchat.PlayerChat;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
@@ -63,6 +64,7 @@ public class BornToSurvive extends JavaPlugin {
                 new PlayerChat(this),
                 new MinecartSpeed(this),
                 new PlayerTeleport(this),
+                new PlayerArmorNotice(this),
                 new Optimize(this)
         );
         components.forEach(Component::load);
