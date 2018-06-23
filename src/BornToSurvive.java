@@ -1,6 +1,7 @@
 package it.menzani.bts;
 
 import it.menzani.bts.components.Component;
+import it.menzani.bts.components.floatingitem.FloatingItem;
 import it.menzani.bts.components.minecartspeed.MinecartSpeed;
 import it.menzani.bts.components.optimize.Optimize;
 import it.menzani.bts.components.playerarmornotice.PlayerArmorNotice;
@@ -21,7 +22,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class BornToSurvive extends JavaPlugin {
     private static final Path logFile = Paths.get("logs", "bts", "bts.log");
@@ -65,6 +69,7 @@ public class BornToSurvive extends JavaPlugin {
                 new MinecartSpeed(this),
                 new PlayerTeleport(this),
                 new PlayerArmorNotice(this),
+                new FloatingItem(this),
                 new Optimize(this)
         );
         components.forEach(Component::load);
@@ -93,7 +98,21 @@ public class BornToSurvive extends JavaPlugin {
         return getServer().getWorld("world_the_end");
     }
 
+    public Stream<World> getWorlds() {
+        Set<World> worlds = new HashSet<>() {
+            public boolean add(World world) {
+                if (world == null) return false;
+                return super.add(world);
+            }
+        };
+        worlds.add(getOverworld());
+        worlds.add(getNether());
+        worlds.add(getTheEnd());
+        return worlds.stream();
+    }
+
     public World.Environment matchWorld(World world) {
+        Objects.requireNonNull(world, "world");
         if (world == getOverworld()) {
             return World.Environment.NORMAL;
         }

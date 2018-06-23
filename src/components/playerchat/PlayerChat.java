@@ -11,7 +11,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
@@ -29,7 +28,7 @@ public class PlayerChat extends SimpleComponent {
         super.load();
 
         getBornToSurvive().registerListener(nearbyPlayersCache);
-        long period = TickDuration.from(Duration.ofMinutes(1));
+        long period = TickDuration.ONE_MINUTE;
         nearbyPlayersCache.runTaskTimer(getBornToSurvive(), period, period);
     }
 
