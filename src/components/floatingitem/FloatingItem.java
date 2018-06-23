@@ -5,6 +5,8 @@ import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.misc.TickDuration;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -12,7 +14,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Dye;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
@@ -69,7 +73,11 @@ public class FloatingItem extends SimpleComponent {
     }
 
     private static boolean shouldFloat(Item item) {
-        ItemMeta meta = item.getItemStack().getItemMeta();
+        ItemStack stack = item.getItemStack();
+        if (stack.getType() != Material.INK_SACK) return false;
+        Dye dye = (Dye) stack.getData();
+        if (dye.getColor() != DyeColor.BLUE) return false;
+        ItemMeta meta = stack.getItemMeta();
         return meta.hasDisplayName() && meta.getDisplayName().equals(name);
     }
 }

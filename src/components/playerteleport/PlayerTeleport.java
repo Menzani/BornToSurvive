@@ -85,6 +85,10 @@ public class PlayerTeleport extends SimpleComponent {
                 sender.sendMessageFormat("You must be holding a " + Ticket.name + '.');
                 return;
             }
+            if (sender.getWorld() != getBornToSurvive().getOverworld() || target.getWorld() != sender.getWorld()) {
+                sender.sendMessageFormat("We currently only support teleporting in Overworld.");
+                return;
+            }
             requests.put(target, sender);
             sender.sendMessageFormat("You requested to teleport to {1}.", target);
             target.sendMessageFormat("{1} wants to teleport to you. Type {2} to accept.", sender, "/teleport");
