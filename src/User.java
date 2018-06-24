@@ -1,4 +1,4 @@
-package it.menzani.bts.misc;
+package it.menzani.bts;
 
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;

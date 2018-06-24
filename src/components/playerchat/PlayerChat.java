@@ -2,7 +2,6 @@ package it.menzani.bts.components.playerchat;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.SimpleComponent;
-import it.menzani.bts.misc.TickDuration;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,25 +10,25 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
     private static final double nearbyPlayersDistance = 10000; // In blocks
 
-    private final NearbyPlayersCache nearbyPlayersCache;
+    private NearbyPlayersCache nearbyPlayersCache;
 
     public PlayerChat(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
-        nearbyPlayersCache = new NearbyPlayersCache(bornToSurvive, nearbyPlayersDistance);
     }
 
     @Override
     public void load() {
         super.load();
 
+        nearbyPlayersCache = new NearbyPlayersCache(this, nearbyPlayersDistance);
         getBornToSurvive().registerListener(nearbyPlayersCache);
-        long period = TickDuration.ONE_MINUTE;
-        nearbyPlayersCache.runTaskTimer(getBornToSurvive(), period, period);
+        nearbyPlayersCache.runTaskTimer(Duration.ofMinutes(1));
     }
 
     @EventHandler

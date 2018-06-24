@@ -1,8 +1,8 @@
 package it.menzani.bts.components.playerteleport;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
-import it.menzani.bts.misc.User;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
@@ -74,7 +74,7 @@ public class PlayerTeleport extends SimpleComponent {
             ticket.mark();
             target.getInventory().addItem(ticket.getItemStack());
         } else {
-            User target = getBornToSurvive().getUser(args[0], sender);
+            User target = getBornToSurvive().getUserOrNotify(args[0], sender);
             if (target == null) return;
             if (target.equals(sender)) {
                 sender.sendMessageFormat("Done.");

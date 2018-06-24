@@ -1,18 +1,16 @@
 package it.menzani.bts.components.floatingitem;
 
-import it.menzani.bts.BornToSurvive;
-import org.bukkit.scheduler.BukkitRunnable;
+import it.menzani.bts.components.SimpleComponent;
+import it.menzani.bts.components.SimpleComponentTask;
 
-class PreventItemDeath extends BukkitRunnable {
-    private final BornToSurvive bornToSurvive;
-
-    PreventItemDeath(BornToSurvive bornToSurvive) {
-        this.bornToSurvive = bornToSurvive;
+class PreventItemDeath extends SimpleComponentTask {
+    PreventItemDeath(SimpleComponent component) {
+        super(component);
     }
 
     @Override
     public void run() {
-        FloatingItem.processEntities(bornToSurvive.getWorlds()
+        FloatingItem.processEntities(getBornToSurvive().getWorlds()
                 .flatMap(world -> world.getEntities().stream()));
     }
 }

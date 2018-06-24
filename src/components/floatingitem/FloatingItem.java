@@ -1,8 +1,8 @@
 package it.menzani.bts.components.floatingitem;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
-import it.menzani.bts.misc.TickDuration;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.DyeColor;
@@ -17,7 +17,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Dye;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -34,9 +33,8 @@ public class FloatingItem extends SimpleComponent {
     public void load() {
         super.load();
 
-        BukkitRunnable task = new PreventItemDeath(getBornToSurvive());
-        long period = TickDuration.from(Duration.ofMinutes(5).minusSeconds(5));
-        task.runTaskTimer(getBornToSurvive(), period, period);
+        ComponentTask task = new PreventItemDeath(this);
+        task.runTaskTimer(Duration.ofMinutes(5).minusSeconds(5));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

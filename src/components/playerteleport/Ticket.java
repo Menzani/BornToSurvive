@@ -1,6 +1,6 @@
 package it.menzani.bts.components.playerteleport;
 
-import it.menzani.bts.misc.User;
+import it.menzani.bts.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

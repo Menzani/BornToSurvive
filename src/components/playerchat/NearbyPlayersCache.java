@@ -1,6 +1,8 @@
 package it.menzani.bts.components.playerchat;
 
-import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.components.ComponentTask;
+import it.menzani.bts.components.SimpleComponent;
+import it.menzani.bts.components.SimpleComponentTask;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -12,21 +14,19 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-class NearbyPlayersCache extends BukkitRunnable implements Listener {
+class NearbyPlayersCache extends SimpleComponentTask implements Listener {
     private static final Set<TeleportCause> unnaturalTeleportCauses =
             EnumSet.of(TeleportCause.SPECTATE, TeleportCause.COMMAND, TeleportCause.PLUGIN);
 
-    private final BornToSurvive bornToSurvive;
     private double distance, netherDistance;
     private final Map<Player, Set<Player>> cache = Collections.synchronizedMap(new HashMap<>());
 
-    NearbyPlayersCache(BornToSurvive bornToSurvive, double distance) {
-        this.bornToSurvive = bornToSurvive;
+    NearbyPlayersCache(SimpleComponent component, double distance) {
+        super(component);
         setDistance(distance);
     }
 
@@ -69,16 +69,12 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
 
     @Override
     public void run() {
-        bornToSurvive.getServer().getOnlinePlayers().forEach(this::updateCache);
+        getBornToSurvive().getServer().getOnlinePlayers().forEach(this::updateCache);
     }
 
     private void updateCacheLater(Player player) {
-        BukkitRunnable task = new BukkitRunnable() {
-            public void run() {
-                updateCache(player);
-            }
-        };
-        task.runTask(bornToSurvive);
+        ComponentTask task = getComponent().newWrappedRunnableTask(() -> updateCache(player));
+        task.runTask();
     }
 
     private void updateCache(Player player) {
@@ -94,7 +90,7 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
         double x = location.getX();
         double z = location.getZ();
         Set<Player> nearbyPlayers = new HashSet<>();
-        switch (bornToSurvive.matchWorld(world)) {
+        switch (getBornToSurvive().matchWorld(world)) {
             case NORMAL:
                 double x2 = x / 8;
                 double z2 = z / 8;
@@ -136,7 +132,7 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
     }
 
     private Set<Player> computeCache(Player player, double x, double z, boolean inOverworld) {
-        World world = inOverworld ? bornToSurvive.getOverworld() : bornToSurvive.getNether();
+        World world = inOverworld ? getBornToSurvive().getOverworld() : getBornToSurvive().getNether();
         if (world == null) return Collections.emptySet();
         double distance = inOverworld ? this.distance : netherDistance;
         return world.getPlayers().stream()

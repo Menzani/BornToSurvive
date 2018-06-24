@@ -1,7 +1,7 @@
 package it.menzani.bts.components;
 
 import it.menzani.bts.BornToSurvive;
-import it.menzani.bts.misc.User;
+import it.menzani.bts.User;
 import it.menzani.logger.Pipeline;
 import it.menzani.logger.api.Logger;
 import it.menzani.logger.api.PipelineLogger;
@@ -90,5 +90,13 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
     }
 
     protected void onCommand(String command, User sender, String[] args) {
+    }
+
+    public ComponentTask newWrappedRunnableTask(Runnable runnable) {
+        return new SimpleComponentTask(this) {
+            public void run() {
+                runnable.run();
+            }
+        };
     }
 }

@@ -11,7 +11,6 @@ import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
-import it.menzani.bts.misc.User;
 import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.logger.api.Logger;
@@ -127,10 +126,10 @@ public class BornToSurvive extends JavaPlugin {
         throw new IllegalArgumentException("Unknown world.");
     }
 
-    public User getUser(String username, User target) {
+    public User getUserOrNotify(String username, User receiver) {
         Player player = getServer().getPlayer(username);
         if (player == null) {
-            target.sendMessageFormat("Player not found.");
+            receiver.sendMessageFormat("Player not found.");
             return null;
         }
         return new User(player);
