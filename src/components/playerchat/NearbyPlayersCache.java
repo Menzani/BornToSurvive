@@ -11,14 +11,18 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 class NearbyPlayersCache extends BukkitRunnable implements Listener {
+    private static final Set<TeleportCause> unnaturalTeleportCauses =
+            EnumSet.of(TeleportCause.SPECTATE, TeleportCause.COMMAND, TeleportCause.PLUGIN);
+
     private final BornToSurvive bornToSurvive;
-    private double distance;
+    private double distance, netherDistance;
     private final Map<Player, Set<Player>> cache = Collections.synchronizedMap(new HashMap<>());
 
     NearbyPlayersCache(BornToSurvive bornToSurvive, double distance) {
@@ -28,6 +32,7 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
 
     void setDistance(double distance) {
         this.distance = Math.pow(distance, 2);
+        netherDistance = Math.pow(distance / 8, 2);
     }
 
     Set<Player> getNearbyPlayers(Player player) {
@@ -37,15 +42,17 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        cache.put(player, null);
-        updateCache(player);
+        cache.put(player, Collections.singleton(player));
+        updateCacheLater(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.isCancelled()) return;
+        if (event.isCancelled() ||
+                !unnaturalTeleportCauses.contains(event.getCause()) ||
+                event.getFrom().getWorld() != event.getTo().getWorld()) return;
         Player player = event.getPlayer();
-        updateCache(player);
+        updateCacheLater(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -65,40 +72,73 @@ class NearbyPlayersCache extends BukkitRunnable implements Listener {
         bornToSurvive.getServer().getOnlinePlayers().forEach(this::updateCache);
     }
 
+    private void updateCacheLater(Player player) {
+        BukkitRunnable task = new BukkitRunnable() {
+            public void run() {
+                updateCache(player);
+            }
+        };
+        task.runTask(bornToSurvive);
+    }
+
     private void updateCache(Player player) {
+        updateCache(player, new HashSet<>());
+    }
+
+    private void updateCache(Player player, Set<Player> processed) {
         if (!cache.containsKey(player)) {
             return;
         }
+        World world = player.getWorld();
         Location location = player.getLocation();
         double x = location.getX();
         double z = location.getZ();
         Set<Player> nearbyPlayers = new HashSet<>();
-        World world = player.getWorld();
         switch (bornToSurvive.matchWorld(world)) {
             case NORMAL:
-                double x2 = Math.floor(x / 8);
-                double z2 = Math.floor(z / 8);
-                nearbyPlayers.addAll(computeCache(world, player, x2, z2, distance / 8));
-                nearbyPlayers.addAll(computeCache(world, player, x, z, distance));
+                double x2 = x / 8;
+                double z2 = z / 8;
+                nearbyPlayers.addAll(computeCache(player, x2, z2, false));
+                nearbyPlayers.addAll(computeCache(player, x, z, true));
                 break;
             case NETHER:
-                x2 = Math.floor(x * 8);
-                z2 = Math.floor(z * 8);
+                x2 = x * 8;
+                z2 = z * 8;
                 if (x2 < -29999872) x2 = -29999872;
                 if (x2 > 29999872) x2 = 29999872;
                 if (z2 < -29999872) z2 = -29999872;
                 if (z2 > 29999872) z2 = 29999872;
-                nearbyPlayers.addAll(computeCache(world, player, x2, z2, distance));
-                nearbyPlayers.addAll(computeCache(world, player, x, z, distance / 8));
+                nearbyPlayers.addAll(computeCache(player, x2, z2, true));
+                nearbyPlayers.addAll(computeCache(player, x, z, false));
                 break;
             case THE_END:
                 nearbyPlayers.addAll(world.getPlayers());
                 break;
         }
-        cache.put(player, nearbyPlayers);
+        Set<Player> oldNearbyPlayers = cache.put(player, nearbyPlayers);
+        assert oldNearbyPlayers != null;
+
+        Set<Player> processing = symmetricDifference(nearbyPlayers, oldNearbyPlayers);
+        processing.removeAll(processed);
+        processed.add(player);
+        for (Player nearbyPlayer : processing) {
+            updateCache(nearbyPlayer, processed);
+        }
     }
 
-    private Set<Player> computeCache(World world, Player player, double x, double z, double distance) {
+    private static <T> Set<T> symmetricDifference(Set<? extends T> one, Set<? extends T> two) {
+        Set<T> result = new HashSet<>(one);
+        result.addAll(two);
+        Set<T> temp = new HashSet<>(one);
+        temp.retainAll(two);
+        result.removeAll(temp);
+        return result;
+    }
+
+    private Set<Player> computeCache(Player player, double x, double z, boolean inOverworld) {
+        World world = inOverworld ? bornToSurvive.getOverworld() : bornToSurvive.getNether();
+        if (world == null) return Collections.emptySet();
+        double distance = inOverworld ? this.distance : netherDistance;
         return world.getPlayers().stream()
                 .filter(other -> player.equals(other) ||
                         distanceSquared(x, z, other.getLocation()) < distance)
