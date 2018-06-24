@@ -1,6 +1,7 @@
 package it.menzani.bts;
 
 import it.menzani.bts.components.Component;
+import it.menzani.bts.components.disablecommand.DisableCommand;
 import it.menzani.bts.components.floatingitem.FloatingItem;
 import it.menzani.bts.components.minecartspeed.MinecartSpeed;
 import it.menzani.bts.components.optimize.Optimize;
@@ -70,6 +71,7 @@ public class BornToSurvive extends JavaPlugin {
                 new PlayerTeleport(this),
                 new PlayerArmorNotice(this),
                 new FloatingItem(this),
+                new DisableCommand(this),
                 new Optimize(this)
         );
         components.forEach(Component::load);
