@@ -36,10 +36,7 @@ public class PlayerChat extends SimpleComponent {
         String deathMessage = event.getDeathMessage();
         event.setDeathMessage(null);
         Player player = event.getEntity();
-        Set<Player> nearbyPlayers = nearbyPlayersCache.getNearbyPlayers(player);
-        for (Player nearbyPlayer : nearbyPlayers) {
-            nearbyPlayer.sendMessage(deathMessage);
-        }
+        player.sendMessage(deathMessage);
     }
 
     @EventHandler
