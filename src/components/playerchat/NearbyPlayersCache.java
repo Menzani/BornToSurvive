@@ -46,10 +46,9 @@ class NearbyPlayersCache extends SimpleComponentTask implements Listener {
         updateCacheLater(player);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.isCancelled() ||
-                !unnaturalTeleportCauses.contains(event.getCause()) ||
+        if (!unnaturalTeleportCauses.contains(event.getCause()) ||
                 event.getFrom().getWorld() != event.getTo().getWorld()) return;
         Player player = event.getPlayer();
         updateCacheLater(player);

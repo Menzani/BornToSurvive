@@ -19,9 +19,8 @@ public class MinecartSpeed extends SimpleComponent {
         super(bornToSurvive);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVehicleCreate(VehicleCreateEvent event) {
-        if (event.isCancelled()) return;
         Vehicle vehicle = event.getVehicle();
         if (!minecartEntityTypes.contains(vehicle.getType())) return;
         Minecart minecart = (Minecart) vehicle;

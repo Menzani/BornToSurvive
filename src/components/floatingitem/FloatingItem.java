@@ -37,9 +37,8 @@ public class FloatingItem extends SimpleComponent {
         task.runTaskTimer(Duration.ofMinutes(5).minusSeconds(5));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if (event.isCancelled()) return;
         Item item = event.getItemDrop();
         if (!shouldFloat(item)) return;
         item.setGravity(false);
