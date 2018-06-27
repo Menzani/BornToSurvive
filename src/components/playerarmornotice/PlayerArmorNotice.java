@@ -31,9 +31,7 @@ public class PlayerArmorNotice extends SimpleComponent {
         ItemStack item = event.getItem();
         Material type = item.getType();
         if (!armorMaterials.contains(type)) return;
-        short maxDurability = type.getMaxDurability();
-        float x = (float) item.getDurability() / maxDurability;
-        if (Math.abs(x - 0.9F) > 0.5F / maxDurability) return;
+        if (type.getMaxDurability() - item.getDurability() != 9) return;
         Player player = event.getPlayer();
         player.sendMessage("Your " + ChatColor.BLUE + prettifyMaterialName(type.name()) + ChatColor.RESET + " will break soon!");
     }
