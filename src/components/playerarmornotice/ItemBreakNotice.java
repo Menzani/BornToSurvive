@@ -10,18 +10,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.EnumSet;
-import java.util.Set;
-
-public class PlayerArmorNotice extends SimpleComponent {
-    private static final Set<Material> armorMaterials = EnumSet.of(
-            Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS,
-            Material.GOLD_HELMET, Material.GOLD_CHESTPLATE, Material.GOLD_LEGGINGS, Material.GOLD_BOOTS,
-            Material.CHAINMAIL_HELMET, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_LEGGINGS, Material.CHAINMAIL_BOOTS,
-            Material.IRON_HELMET, Material.IRON_CHESTPLATE, Material.IRON_LEGGINGS, Material.IRON_BOOTS,
-            Material.DIAMOND_HELMET, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_LEGGINGS, Material.DIAMOND_BOOTS);
-
-    public PlayerArmorNotice(BornToSurvive bornToSurvive) {
+public class ItemBreakNotice extends SimpleComponent {
+    public ItemBreakNotice(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
     }
 
@@ -30,7 +20,6 @@ public class PlayerArmorNotice extends SimpleComponent {
         if (event.isCancelled()) return;
         ItemStack item = event.getItem();
         Material type = item.getType();
-        if (!armorMaterials.contains(type)) return;
         if (type.getMaxDurability() - item.getDurability() != 9) return;
         Player player = event.getPlayer();
         player.sendMessage("Your " + ChatColor.BLUE + prettifyMaterialName(type.name()) + ChatColor.RESET + " will break soon!");
