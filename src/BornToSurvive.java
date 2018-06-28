@@ -9,6 +9,7 @@ import it.menzani.bts.components.playerarmornotice.ItemBreakNotice;
 import it.menzani.bts.components.playerchat.PlayerChat;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
+import it.menzani.bts.components.worldreset.WorldReset;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
 import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
@@ -71,7 +72,8 @@ public class BornToSurvive extends JavaPlugin {
                 new ItemBreakNotice(this),
                 new FloatingItem(this),
                 new DisableCommand(this),
-                new Optimize(this)
+                new Optimize(this),
+                new WorldReset(this)
         );
         components.forEach(Component::load);
     }
