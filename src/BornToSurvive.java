@@ -34,6 +34,7 @@ public class BornToSurvive extends JavaPlugin {
 
     private Logger logger;
     private WrappedSQLDatabase database;
+    private Set<Component> components;
 
     public Logger getRootLogger() {
         return logger;
@@ -59,13 +60,9 @@ public class BornToSurvive extends JavaPlugin {
         if (invalid) return;
 
         database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), logger);
-    }
+        if (database.isConnectionNotAvailable()) return;
 
-    @Override
-    public void onEnable() {
-        if (database == null || database.isConnectionNotAvailable()) return;
-
-        final Set<Component> components = Set.of(
+        components = Set.of(
                 new PlayerSpawn(this),
                 new PlayerChat(this),
                 new MinecartSpeed(this),
@@ -76,12 +73,21 @@ public class BornToSurvive extends JavaPlugin {
                 new Optimize(this),
                 new WorldReset(this, Phase.NONE)
         );
-        components.forEach(Component::load);
+    }
+
+    @Override
+    public void onEnable() {
+        if (components != null) {
+            components.forEach(Component::load);
+        }
     }
 
     @Override
     public void onDisable() {
         if (database != null) {
+            if (components != null) {
+                components.forEach(Component::unload);
+            }
             database.close();
         }
     }

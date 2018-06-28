@@ -46,6 +46,10 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
         register();
     }
 
+    @Override
+    public void unload() {
+    }
+
     protected void registerCommand(String name) {
         commandExecutor.registerCommand(name);
     }
