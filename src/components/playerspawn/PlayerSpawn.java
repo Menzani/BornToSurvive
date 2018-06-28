@@ -14,23 +14,26 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import java.sql.PreparedStatement;
 
 public class PlayerSpawn extends SimpleComponent {
-    private final PreparedStatement setSpawnStatement, getSpawnStatement;
+    private PreparedStatement setSpawnStatement, getSpawnStatement;
 
     public PlayerSpawn(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
-        WrappedSQLDatabase database = bornToSurvive.getDatabase();
+    }
+
+    @Override
+    public void load() {
+        WrappedSQLDatabase database = getBornToSurvive().getDatabase();
 
         PreparedStatement[] preparedStatements =
                 (PreparedStatement[]) database.submit(new PrepareStatements(), this);
-        if (preparedStatements == null) {
-            setSpawnStatement = getSpawnStatement = null;
-            return;
-        }
-
+        if (preparedStatements == null) return;
         setSpawnStatement = preparedStatements[0];
         getSpawnStatement = preparedStatements[1];
 
-        database.execute(new CreateTable(), this);
+        boolean error = database.execute(new CreateTable(), this);
+        if (error) return;
+
+        super.load();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

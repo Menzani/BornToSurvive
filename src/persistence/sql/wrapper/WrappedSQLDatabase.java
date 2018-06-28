@@ -32,9 +32,13 @@ public class WrappedSQLDatabase implements AutoCloseable {
         return connection == null;
     }
 
-    public void execute(SQLDatabaseRunnable runnable, Component component) {
+    public boolean execute(SQLDatabaseRunnable runnable, Component component) {
         Object result = submit(runnable, component);
-        assert result == null || result == DatabaseCallable.NULL;
+        if (result == null) {
+            return true;
+        }
+        assert result == DatabaseCallable.NULL;
+        return false;
     }
 
     public Object submit(SQLDatabaseCallable callable, Component component) {

@@ -8,38 +8,35 @@ import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import java.sql.PreparedStatement;
 
 public class WorldReset extends SimpleComponent {
-    private final ComponentListener phase;
+    private final Phase phase;
 
     public WorldReset(BornToSurvive bornToSurvive, Phase phase) {
         super(bornToSurvive);
-        WrappedSQLDatabase database = bornToSurvive.getDatabase();
-
-        PreparedStatement[] preparedStatements =
-                (PreparedStatement[]) database.submit(new PrepareStatements(), this);
-        if (preparedStatements == null) {
-            this.phase = null;
-            return;
-        }
-
-        switch (phase) {
-            case MARK:
-                this.phase = new MarkPhase(this, preparedStatements[0], preparedStatements[1]);
-                break;
-            case RESET:
-                this.phase = new ResetPhase(this);
-                break;
-            default:
-                this.phase = null;
-                break;
-        }
-
-        database.execute(new CreateTable(), this);
+        this.phase = phase;
     }
 
     @Override
     public void load() {
-        if (phase != null) {
-            phase.register();
+        WrappedSQLDatabase database = getBornToSurvive().getDatabase();
+
+        PreparedStatement[] preparedStatements =
+                (PreparedStatement[]) database.submit(new PrepareStatements(), this);
+        if (preparedStatements == null) return;
+        ComponentListener phaseListener = null;
+        switch (phase) {
+            case MARK:
+                phaseListener = new MarkPhase(this, preparedStatements[0], preparedStatements[1]);
+                break;
+            case RESET:
+                phaseListener = new ResetPhase(this);
+                break;
+        }
+
+        boolean error = database.execute(new CreateTable(), this);
+        if (error) return;
+
+        if (phaseListener != null) {
+            phaseListener.register();
         }
     }
 }
