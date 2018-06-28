@@ -15,10 +15,10 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class SimpleComponent extends SimpleComponentListener implements Component, CommandExecutor {
+public abstract class SimpleComponent extends SimpleComponentListener implements Component {
     private final BornToSurvive bornToSurvive;
     private final Logger logger;
-    private final Set<Command> playerOnlyCommands = new HashSet<>();
+    private final CommandExecutorImpl commandExecutor = new CommandExecutorImpl();
 
     protected SimpleComponent(BornToSurvive bornToSurvive) {
         this.bornToSurvive = bornToSurvive;
@@ -47,18 +47,12 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
     }
 
     protected void registerCommand(String name) {
-        doRegisterCommand(name);
+        commandExecutor.registerCommand(name);
     }
 
     protected void registerPlayerCommand(String name) {
-        Command command = doRegisterCommand(name);
-        playerOnlyCommands.add(command);
-    }
-
-    private Command doRegisterCommand(String name) {
-        PluginCommand command = bornToSurvive.getCommand(name);
-        command.setExecutor(this);
-        return command;
+        Command command = commandExecutor.registerCommand(name);
+        commandExecutor.playerOnlyCommands.add(command);
     }
 
     @Override
@@ -81,21 +75,6 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
         return this;
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String commandName = command.getName();
-        if (playerOnlyCommands.contains(command)) {
-            if (sender instanceof Player) {
-                onCommand(commandName, new User((Player) sender), args);
-            } else {
-                sender.sendMessage("This command can only be used by in-game players.");
-            }
-        } else {
-            onCommand(commandName, sender, args);
-        }
-        return true;
-    }
-
     protected void onCommand(String command, CommandSender sender, String[] args) {
     }
 
@@ -108,5 +87,30 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
                 runnable.run();
             }
         };
+    }
+
+    private class CommandExecutorImpl implements CommandExecutor {
+        private final Set<Command> playerOnlyCommands = new HashSet<>();
+
+        private Command registerCommand(String name) {
+            PluginCommand command = bornToSurvive.getCommand(name);
+            command.setExecutor(this);
+            return command;
+        }
+
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            String commandName = command.getName();
+            if (playerOnlyCommands.contains(command)) {
+                if (sender instanceof Player) {
+                    SimpleComponent.this.onCommand(commandName, new User((Player) sender), args);
+                } else {
+                    sender.sendMessage("This command can only be used by in-game players.");
+                }
+            } else {
+                SimpleComponent.this.onCommand(commandName, sender, args);
+            }
+            return true;
+        }
     }
 }
