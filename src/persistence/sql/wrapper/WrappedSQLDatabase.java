@@ -54,9 +54,9 @@ public class WrappedSQLDatabase implements AutoCloseable {
         }
         if (callable instanceof CheckedSQLDatabaseCallable) {
             CheckedSQLDatabaseCallable checkedCallable = (CheckedSQLDatabaseCallable) callable;
-            String warningMessage = checkedCallable.doPostCheck(result);
-            if (warningMessage != null) {
-                component.getLogger().warn(warningMessage);
+            String errorMessage = checkedCallable.doPostCheck(result);
+            if (errorMessage != null) {
+                component.getLogger().fatal(errorMessage);
                 return null;
             }
         }

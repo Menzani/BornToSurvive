@@ -36,10 +36,9 @@ public class PlayerSpawn extends SimpleComponent {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerSpawnLocation(PlayerSpawnLocationEvent event) {
         Player player = event.getPlayer();
-        Location location = event.getSpawnLocation();
 
         Integer updateCount = (Integer) getBornToSurvive().getDatabase().submit(new SetSpawn(setSpawnStatement,
-                player.getUniqueId(), new Spawn(location.getBlockX(), location.getBlockY(), location.getBlockZ())), this);
+                player.getUniqueId(), new Spawn(event.getSpawnLocation())), this);
         if (updateCount == null) return;
 
         boolean hasPlayedBefore = player.hasPlayedBefore();
