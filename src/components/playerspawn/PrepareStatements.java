@@ -9,11 +9,10 @@ import java.sql.SQLException;
 
 class PrepareStatements implements SQLDatabaseCallable {
     @Override
-    public PreparedStatement[] call(Object connection, Component component) throws SQLException {
-        Connection sqlConnection = (Connection) connection;
+    public PreparedStatement[] call(Connection connection, Component component) throws SQLException {
         return new PreparedStatement[]{
-                sqlConnection.prepareStatement("INSERT INTO " + component.getName() + " VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING"),
-                sqlConnection.prepareStatement("SELECT spawnX, spawnY, spawnZ FROM " + component.getName() + " WHERE playerId = ?")
+                connection.prepareStatement("INSERT INTO " + component.getName() + " VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING"),
+                connection.prepareStatement("SELECT spawnX, spawnY, spawnZ FROM " + component.getName() + " WHERE playerId = ?")
         };
     }
 

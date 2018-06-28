@@ -8,9 +8,8 @@ import java.sql.SQLException;
 
 class CreateTable implements SQLDatabaseRunnable {
     @Override
-    public void run(Object connection, Component component) throws SQLException {
-        Connection sqlConnection = (Connection) connection;
-        sqlConnection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() +
+    public void run(Connection connection, Component component) throws SQLException {
+        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() +
                 "(chunkX INT, chunkZ INT, PRIMARY KEY(chunkX, chunkZ))");
     }
 

@@ -3,6 +3,7 @@ package it.menzani.bts.components.playerspawn;
 import it.menzani.bts.components.Component;
 import it.menzani.bts.persistence.sql.wrapper.CheckedSQLDatabaseCallable;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -19,7 +20,7 @@ class SetSpawn implements CheckedSQLDatabaseCallable {
     }
 
     @Override
-    public Integer call(Object connection, Component component) throws SQLException {
+    public Integer call(Connection connection, Component component) throws SQLException {
         preparedStatement.setObject(1, playerId);
         preparedStatement.setInt(2, spawn.x);
         preparedStatement.setInt(3, spawn.y);

@@ -3,6 +3,7 @@ package it.menzani.bts.components.worldreset;
 import it.menzani.bts.components.Component;
 import it.menzani.bts.persistence.sql.wrapper.CheckedSQLDatabaseCallable;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -16,7 +17,7 @@ class AddChunk implements CheckedSQLDatabaseCallable {
     }
 
     @Override
-    public Integer call(Object connection, Component component) throws SQLException {
+    public Integer call(Connection connection, Component component) throws SQLException {
         preparedStatement.setInt(1, chunkLocation.x);
         preparedStatement.setInt(2, chunkLocation.z);
         return preparedStatement.executeUpdate();
