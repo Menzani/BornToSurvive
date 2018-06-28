@@ -4,7 +4,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.time.Duration;
 
-public interface ComponentTask {
+public interface ComponentTask extends ComponentElement {
     BukkitTask runTask() throws IllegalArgumentException, IllegalStateException;
 
     BukkitTask runTaskAsynchronously() throws IllegalArgumentException, IllegalStateException;
@@ -20,6 +20,4 @@ public interface ComponentTask {
     BukkitTask runTaskTimer(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
 
     BukkitTask runTaskTimerAsynchronously(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
-
-    Component getComponent();
 }

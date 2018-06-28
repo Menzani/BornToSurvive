@@ -27,7 +27,7 @@ public class PlayerChat extends SimpleComponent {
         super.load();
 
         nearbyPlayersCache = new NearbyPlayersCache(this, nearbyPlayersDistance);
-        getBornToSurvive().registerListener(nearbyPlayersCache);
+        nearbyPlayersCache.register();
         nearbyPlayersCache.runTaskTimer(Duration.ofMinutes(1));
     }
 

@@ -11,12 +11,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class SimpleComponent implements Component, Listener, CommandExecutor {
+public abstract class SimpleComponent extends SimpleComponentListener implements Component, CommandExecutor {
     private final BornToSurvive bornToSurvive;
     private final Logger logger;
     private final Set<Command> playerOnlyCommands = new HashSet<>();
@@ -37,13 +36,14 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
         return logger.getPipelines().get(0);
     }
 
+    @Override
     protected BornToSurvive getBornToSurvive() {
         return bornToSurvive;
     }
 
     @Override
     public void load() {
-        bornToSurvive.registerListener(this);
+        register();
     }
 
     protected void registerCommand(String name) {
@@ -69,6 +69,16 @@ public abstract class SimpleComponent implements Component, Listener, CommandExe
     @Override
     public Logger getLogger() {
         return logger;
+    }
+
+    @Override
+    public void register() {
+        bornToSurvive.registerListener(this);
+    }
+
+    @Override
+    public SimpleComponent getComponent() {
+        return this;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.menzani.bts.components.playerchat;
 
+import it.menzani.bts.components.ComponentListener;
 import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentTask;
@@ -8,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class NearbyPlayersCache extends SimpleComponentTask implements Listener {
+class NearbyPlayersCache extends SimpleComponentTask implements ComponentListener {
     private static final Set<TeleportCause> unnaturalTeleportCauses =
             EnumSet.of(TeleportCause.SPECTATE, TeleportCause.COMMAND, TeleportCause.PLUGIN);
 
@@ -33,6 +33,11 @@ class NearbyPlayersCache extends SimpleComponentTask implements Listener {
     void setDistance(double distance) {
         this.distance = Math.pow(distance, 2);
         netherDistance = Math.pow(distance / 8, 2);
+    }
+
+    @Override
+    public void register() {
+        getBornToSurvive().registerListener(this);
     }
 
     Set<Player> getNearbyPlayers(Player player) {
