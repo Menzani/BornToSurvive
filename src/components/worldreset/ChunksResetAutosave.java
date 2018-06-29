@@ -19,7 +19,7 @@ class ChunksResetAutosave extends SimpleComponentTask {
 
     @Override
     public void run() {
-        String chunksResetCompact = chunksReset.stream() // TODO Parallelize?
+        String chunksResetCompact = chunksReset.parallelStream()
                 .map(ChunkLocation::toCompactString)
                 .collect(Collectors.joining(WorldReset.chunksResetCompactSeparator));
         getBornToSurvive().getDatabase().execute(new SetChunksReset(setChunksResetStatement, chunksResetCompact), getComponent());

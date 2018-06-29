@@ -1,6 +1,6 @@
 package it.menzani.bts.components.worldreset;
 
-class ParseException extends Exception {
+class ParseException extends RuntimeException {
     ParseException(String message) {
         super(message);
     }

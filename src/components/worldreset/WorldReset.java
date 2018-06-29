@@ -9,9 +9,10 @@ import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import java.sql.PreparedStatement;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WorldReset extends SimpleComponent {
     static final String signText = "Do not reset me!";
@@ -49,11 +50,11 @@ public class WorldReset extends SimpleComponent {
                 String chunksResetCompact = (String) database.submit(new GetChunksReset(), this);
                 if (chunksResetCompact == null) return;
 
-                Set<ChunkLocation> chunksReset = new HashSet<>();
+                Set<ChunkLocation> chunksReset;
                 try {
-                    for (String string : split(chunksResetCompact)) {
-                        chunksReset.add(ChunkLocation.fromCompactString(string));
-                    }
+                    chunksReset = split(chunksResetCompact)
+                            .map(ChunkLocation::fromCompactString)
+                            .collect(Collectors.toSet());
                 } catch (ParseException e) {
                     getLogger().throwable(e, "Could not parse chunk location.");
                     return;
@@ -68,7 +69,7 @@ public class WorldReset extends SimpleComponent {
         phaseListener.register();
     }
 
-    private static List<String> split(String chunksResetCompact) {
+    private static Stream<String> split(String chunksResetCompact) {
         List<String> result = new ArrayList<>();
         char[] characters = chunksResetCompact.toCharArray();
         int lastPosition = 0;
@@ -82,7 +83,7 @@ public class WorldReset extends SimpleComponent {
         if (lastPosition != characters.length) {
             result.add(chunksResetCompact.substring(lastPosition));
         }
-        return result;
+        return result.parallelStream();
     }
 
     @Override
