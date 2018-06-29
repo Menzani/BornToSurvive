@@ -13,7 +13,7 @@ class PrepareStatements implements SQLDatabaseCallable {
         return new PreparedStatement[]{
                 connection.prepareStatement("INSERT INTO " + component.getName() + "_mark VALUES (?, ?) ON CONFLICT DO NOTHING"),
                 connection.prepareStatement("DELETE FROM " + component.getName() + "_mark WHERE chunkX = ? AND chunkZ = ?"),
-                connection.prepareStatement("INSERT INTO " + component.getName() + "_reset VALUES (?)")
+                connection.prepareStatement("INSERT INTO " + component.getName() + "_reset VALUES (false, ?) ON CONFLICT (id) DO UPDATE SET value = EXCLUDED.value")
         };
     }
 

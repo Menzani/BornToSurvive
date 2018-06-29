@@ -10,7 +10,8 @@ import java.sql.SQLException;
 class GetChunksReset implements SQLDatabaseCallable {
     @Override
     public String call(Connection connection, Component component) throws SQLException {
-        ResultSet resultSet = connection.createStatement().executeQuery("SELECT value FROM " + component.getName() + "_reset");
+        ResultSet resultSet = connection.createStatement().executeQuery("SELECT value FROM " +
+                component.getName() + "_reset WHERE id = false");
         boolean validRow = resultSet.next();
         if (validRow) {
             return resultSet.getString(1);

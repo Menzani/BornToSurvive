@@ -12,7 +12,7 @@ class CreateTables implements SQLDatabaseRunnable {
         connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() + "_mark" +
                 "(chunkX INT, chunkZ INT, PRIMARY KEY(chunkX, chunkZ))");
         connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() + "_reset" +
-                "(value TEXT NOT NULL)");
+                "(id BOOLEAN PRIMARY KEY, value TEXT NOT NULL)");
     }
 
     @Override
