@@ -3,3 +3,5 @@ database:
   name: bts
   user:
   password:
+worldReset:
+  phase: none
