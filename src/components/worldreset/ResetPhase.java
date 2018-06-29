@@ -22,9 +22,12 @@ class ResetPhase extends SimpleComponentListener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(ChunkLoadEvent event) {
-        if (event.isNewChunk()) return;
         Chunk chunk = event.getChunk();
         ChunkLocation chunkLocation = new ChunkLocation(chunk);
+        if (event.isNewChunk()) {
+            chunksReset.add(chunkLocation);
+            return;
+        }
         if (chunksReset.contains(chunkLocation)) {
             return;
         }
