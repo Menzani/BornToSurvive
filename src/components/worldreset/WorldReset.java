@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WorldReset extends SimpleComponent {
-    static final String signText = "Do not reset me!";
-    static final int markRange = 10;
     private static final char chunksResetCompactSeparatorChar = ';';
     static final String chunksResetCompactSeparator = Character.toString(chunksResetCompactSeparatorChar);
+    static final String signText = "Do not reset me!";
+    static final int markRange = 10;
 
     private final Phase phase;
     private SimpleComponentTask chunksResetAutosave;

@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 class Ticket {
-    static final String name = ChatColor.RESET + "Teleportation Ticket";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    static final String name = ChatColor.RESET + "Teleportation Ticket";
 
     private final ItemStack stack;
     private ItemMeta meta;
