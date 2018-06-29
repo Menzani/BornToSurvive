@@ -9,7 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 class ResetPhase extends SimpleComponentListener {
     private final Set<?> markedArea;
@@ -19,10 +18,6 @@ class ResetPhase extends SimpleComponentListener {
         super(component);
         this.markedArea = markedArea;
         this.chunksReset = chunksReset;
-    }
-
-    Stream<ChunkLocation> getChunksReset() {
-        return chunksReset.stream();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

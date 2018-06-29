@@ -3,23 +3,24 @@ package it.menzani.bts.components.worldreset;
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.ComponentListener;
 import it.menzani.bts.components.SimpleComponent;
+import it.menzani.bts.components.SimpleComponentTask;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 
 import java.sql.PreparedStatement;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class WorldReset extends SimpleComponent {
     static final String signText = "Do not reset me!";
     static final int markRange = 10;
-    private static final char chunksResetCompactSeparator = ';';
+    private static final char chunksResetCompactSeparatorChar = ';';
+    static final String chunksResetCompactSeparator = Character.toString(chunksResetCompactSeparatorChar);
 
     private final Phase phase;
-    private ComponentListener phaseListener;
-    private PreparedStatement setChunksResetStatement;
+    private SimpleComponentTask chunksResetAutosave;
 
     public WorldReset(BornToSurvive bornToSurvive, Phase phase) {
         super(bornToSurvive);
@@ -35,6 +36,7 @@ public class WorldReset extends SimpleComponent {
                 (PreparedStatement[]) database.submit(new PrepareStatements(), this);
         if (preparedStatements == null) return;
         ComponentListener phaseListener;
+        SimpleComponentTask chunksResetAutosave = null;
         switch (phase) {
             case MARK:
                 phaseListener = new MarkPhase(this, preparedStatements[0], preparedStatements[1]);
@@ -55,7 +57,7 @@ public class WorldReset extends SimpleComponent {
                     return;
                 }
                 phaseListener = new ResetPhase(this, markedArea, chunksReset);
-                setChunksResetStatement = preparedStatements[2];
+                chunksResetAutosave = new ChunksResetAutosave(this, preparedStatements[2], chunksReset);
                 break;
             default:
                 throw new AssertionError();
@@ -65,7 +67,10 @@ public class WorldReset extends SimpleComponent {
         if (error) return;
 
         phaseListener.register();
-        this.phaseListener = phaseListener;
+        if (phase == Phase.RESET) {
+            chunksResetAutosave.runTaskTimerAsynchronously(Duration.ofMinutes(5));
+            this.chunksResetAutosave = chunksResetAutosave;
+        }
     }
 
     private static List<String> split(String chunksResetCompact) {
@@ -74,7 +79,7 @@ public class WorldReset extends SimpleComponent {
         int lastPosition = 0;
         for (int i = 0; i < characters.length; i++) {
             char character = characters[i];
-            if (character == chunksResetCompactSeparator) {
+            if (character == chunksResetCompactSeparatorChar) {
                 result.add(chunksResetCompact.substring(lastPosition, i));
                 lastPosition = i + 1;
             }
@@ -87,12 +92,7 @@ public class WorldReset extends SimpleComponent {
 
     @Override
     public void unload() {
-        if (phaseListener == null || phase != Phase.RESET) return;
-        ResetPhase resetPhase = (ResetPhase) phaseListener;
-
-        String chunksResetCompact = resetPhase.getChunksReset()
-                .map(ChunkLocation::toCompactString)
-                .collect(Collectors.joining(","));
-        getBornToSurvive().getDatabase().execute(new SetChunksReset(setChunksResetStatement, chunksResetCompact), this);
+        if (chunksResetAutosave == null) return;
+        chunksResetAutosave.run();
     }
 }
