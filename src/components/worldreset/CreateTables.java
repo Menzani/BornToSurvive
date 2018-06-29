@@ -6,11 +6,13 @@ import it.menzani.bts.persistence.sql.wrapper.SQLDatabaseRunnable;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-class CreateTable implements SQLDatabaseRunnable {
+class CreateTables implements SQLDatabaseRunnable {
     @Override
     public void run(Connection connection, Component component) throws SQLException {
-        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() +
+        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() + "_mark" +
                 "(chunkX INT, chunkZ INT, PRIMARY KEY(chunkX, chunkZ))");
+        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() + "_reset" +
+                "(value TEXT NOT NULL)");
     }
 
     @Override

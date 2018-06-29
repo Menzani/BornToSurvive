@@ -11,8 +11,9 @@ class PrepareStatements implements SQLDatabaseCallable {
     @Override
     public PreparedStatement[] call(Connection connection, Component component) throws SQLException {
         return new PreparedStatement[]{
-                connection.prepareStatement("INSERT INTO " + component.getName() + " VALUES (?, ?) ON CONFLICT DO NOTHING"),
-                connection.prepareStatement("DELETE FROM " + component.getName() + " WHERE chunkX = ? AND chunkZ = ?")
+                connection.prepareStatement("INSERT INTO " + component.getName() + "_mark VALUES (?, ?) ON CONFLICT DO NOTHING"),
+                connection.prepareStatement("DELETE FROM " + component.getName() + "_mark WHERE chunkX = ? AND chunkZ = ?"),
+                connection.prepareStatement("INSERT INTO " + component.getName() + "_reset VALUES (?)")
         };
     }
 

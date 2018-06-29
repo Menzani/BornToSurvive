@@ -8,6 +8,8 @@ import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import java.sql.PreparedStatement;
 
 public class WorldReset extends SimpleComponent {
+    static final String signText = "Do not reset me!";
+
     private final Phase phase;
 
     public WorldReset(BornToSurvive bornToSurvive, Phase phase) {
@@ -32,7 +34,7 @@ public class WorldReset extends SimpleComponent {
                 break;
         }
 
-        boolean error = database.execute(new CreateTable(), this);
+        boolean error = database.execute(new CreateTables(), this);
         if (error) return;
 
         if (phaseListener != null) {

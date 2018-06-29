@@ -15,8 +15,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import java.sql.PreparedStatement;
 
 class MarkPhase extends SimpleComponentListener {
-    private static final String signText = "Do not reset me!";
-
     private final PreparedStatement addChunkStatement, removeChunkStatement;
 
     MarkPhase(SimpleComponent component, PreparedStatement addChunkStatement, PreparedStatement removeChunkStatement) {
@@ -27,7 +25,7 @@ class MarkPhase extends SimpleComponentListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignChange(SignChangeEvent event) {
-        if (!event.getLine(0).equals(signText)) return;
+        if (!event.getLine(0).equals(WorldReset.signText)) return;
         Block block = event.getBlock();
 
         Integer updateCount = (Integer) getBornToSurvive().getDatabase().submit(new AddChunk(addChunkStatement,
@@ -65,7 +63,7 @@ class MarkPhase extends SimpleComponentListener {
             return true;
         }
         Sign sign = (Sign) block.getState();
-        return !sign.getLine(0).equals(signText);
+        return !sign.getLine(0).equals(WorldReset.signText);
     }
 
     private void removeChunk(Block block) {
