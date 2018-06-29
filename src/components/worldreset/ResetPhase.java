@@ -1,7 +1,6 @@
 package it.menzani.bts.components.worldreset;
 
 import it.menzani.bts.components.SimpleComponent;
-import it.menzani.bts.components.SimpleComponentListener;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -10,7 +9,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 
 import java.util.Set;
 
-class ResetPhase extends SimpleComponentListener {
+class ResetPhase extends NonePhase {
     private final Set<?> markedArea;
     private final Set<ChunkLocation> chunksReset;
 

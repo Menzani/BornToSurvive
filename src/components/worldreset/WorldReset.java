@@ -30,7 +30,11 @@ public class WorldReset extends SimpleComponent {
 
     @Override
     public void load() {
-        if (phase == Phase.NONE) return;
+        if (phase == Phase.NONE) {
+            ComponentListener phaseListener = new NonePhase(this);
+            phaseListener.register();
+            return;
+        }
         WrappedSQLDatabase database = getBornToSurvive().getDatabase();
 
         boolean error = database.execute(new CreateTables(), this);
