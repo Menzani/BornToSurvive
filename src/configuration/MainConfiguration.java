@@ -40,10 +40,18 @@ public class MainConfiguration {
         String name = database.getString("name");
         String user = database.getString("user");
         String password = database.getString("password");
-        if (host == null || host.isEmpty()) validation.addProblem(database, "host", Problem.NULL_OR_EMPTY);
-        if (name == null || name.isEmpty()) validation.addProblem(database, "name", Problem.NULL_OR_EMPTY);
-        if (user == null || user.isEmpty()) validation.addProblem(database, "user", Problem.NULL_OR_EMPTY);
-        if (password == null || password.isEmpty()) validation.addProblem(database, "password", Problem.NULL_OR_EMPTY);
+        if (host == null || host.isEmpty()) {
+            validation.addProblem(database, "host", SimpleProblem.NULL_OR_EMPTY);
+        }
+        if (name == null || name.isEmpty()) {
+            validation.addProblem(database, "name", SimpleProblem.NULL_OR_EMPTY);
+        }
+        if (user == null || user.isEmpty()) {
+            validation.addProblem(database, "user", SimpleProblem.NULL_OR_EMPTY);
+        }
+        if (password == null || password.isEmpty()) {
+            validation.addProblem(database, "password", SimpleProblem.NULL_OR_EMPTY);
+        }
         return new DatabaseCredentials(host, name, user, password);
     }
 }
