@@ -32,11 +32,13 @@ public class WorldReset extends SimpleComponent {
         if (phase == Phase.NONE) return;
         WrappedSQLDatabase database = getBornToSurvive().getDatabase();
 
+        boolean error = database.execute(new CreateTables(), this);
+        if (error) return;
+
         PreparedStatement[] preparedStatements =
                 (PreparedStatement[]) database.submit(new PrepareStatements(), this);
         if (preparedStatements == null) return;
         ComponentListener phaseListener;
-        SimpleComponentTask chunksResetAutosave = null;
         switch (phase) {
             case MARK:
                 phaseListener = new MarkPhase(this, preparedStatements[0], preparedStatements[1]);
@@ -58,19 +60,12 @@ public class WorldReset extends SimpleComponent {
                 }
                 phaseListener = new ResetPhase(this, markedArea, chunksReset);
                 chunksResetAutosave = new ChunksResetAutosave(this, preparedStatements[2], chunksReset);
+                chunksResetAutosave.runTaskTimerAsynchronously(Duration.ofMinutes(5));
                 break;
             default:
                 throw new AssertionError();
         }
-
-        boolean error = database.execute(new CreateTables(), this);
-        if (error) return;
-
         phaseListener.register();
-        if (phase == Phase.RESET) {
-            chunksResetAutosave.runTaskTimerAsynchronously(Duration.ofMinutes(5));
-            this.chunksResetAutosave = chunksResetAutosave;
-        }
     }
 
     private static List<String> split(String chunksResetCompact) {
