@@ -17,6 +17,6 @@ class CreateTables implements SQLDatabaseRunnable {
 
     @Override
     public String getErrorMessage() {
-        return "Could not create database table.";
+        return "Could not create database tables.";
     }
 }

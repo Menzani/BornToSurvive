@@ -24,6 +24,16 @@ class MarkPhase extends SimpleComponentListener {
         this.removeChunkStatement = removeChunkStatement;
     }
 
+    @Override
+    public void register() {
+        super.register();
+
+        Phase lastWorldResetPhase = getBornToSurvive().getPropertyStore().getLastWorldResetPhase();
+        if (lastWorldResetPhase == Phase.MARK) return;
+        getLogger().info("Resetting chunks marked and reset to prepare for new mark phase");
+        getBornToSurvive().getDatabase().execute(new PurgeTables(), getComponent());
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignChange(SignChangeEvent event) {
         if (!event.getLine(0).equals(WorldReset.signText)) return;
