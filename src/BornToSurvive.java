@@ -24,17 +24,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
 public class BornToSurvive extends JavaPlugin {
     private static final Path logFile = Paths.get("logs", "bts", "bts.log");
+    private static final String propertyInitialized = "Property has already been initialized.";
+    private static final String propertyNotInitialized = "Property has not yet been initialized. Calling from Component#load() will fix this.";
 
     private Logger logger;
     private WrappedSQLDatabase database;
     private Set<Component> components;
+    private World overworld, nether, theEnd;
+    private Set<World> worlds;
 
     public Logger getRootLogger() {
         return logger;
@@ -42,6 +44,10 @@ public class BornToSurvive extends JavaPlugin {
 
     public WrappedSQLDatabase getDatabase() {
         return database;
+    }
+
+    Set<Component> getComponents() {
+        return components;
     }
 
     public BornToSurvive() {
@@ -79,7 +85,8 @@ public class BornToSurvive extends JavaPlugin {
     public void onEnable() {
         if (components != null) {
             components.forEach(Component::loadPreWorld);
-            BukkitRunnable task = new ExecutePostWorld(components);
+
+            BukkitRunnable task = new ExecutePostWorld(this);
             task.runTask(this);
         }
     }
@@ -99,32 +106,49 @@ public class BornToSurvive extends JavaPlugin {
     }
 
     public World getOverworld() {
-        return getServer().getWorld("world");
+        if (overworld == null) throw new IllegalStateException(propertyNotInitialized);
+        return overworld;
+    }
+
+    void setOverworld(World overworld) {
+        assert overworld != null;
+        if (this.overworld != null) throw new IllegalStateException(propertyInitialized);
+        this.overworld = overworld;
     }
 
     public World getNether() {
-        return getServer().getWorld("world_nether");
+        if (nether == null) throw new IllegalStateException(propertyNotInitialized);
+        return nether;
+    }
+
+    void setNether(World nether) {
+        assert nether != null;
+        if (this.nether != null) throw new IllegalStateException(propertyInitialized);
+        this.nether = nether;
     }
 
     public World getTheEnd() {
-        return getServer().getWorld("world_the_end");
+        if (theEnd == null) throw new IllegalStateException(propertyNotInitialized);
+        return theEnd;
+    }
+
+    void setTheEnd(World theEnd) {
+        assert theEnd != null;
+        if (this.theEnd != null) throw new IllegalStateException(propertyInitialized);
+        this.theEnd = theEnd;
     }
 
     public Stream<World> getWorlds() {
-        Set<World> worlds = new HashSet<>() {
-            public boolean add(World world) {
-                if (world == null) return false;
-                return super.add(world);
-            }
-        };
-        worlds.add(getOverworld());
-        worlds.add(getNether());
-        worlds.add(getTheEnd());
+        if (worlds == null) throw new IllegalStateException(propertyNotInitialized);
         return worlds.stream();
     }
 
+    void setWorlds(Set<World> worlds) {
+        if (this.worlds != null) throw new IllegalStateException(propertyInitialized);
+        this.worlds = worlds;
+    }
+
     public World.Environment matchWorld(World world) {
-        Objects.requireNonNull(world, "world");
         if (world == getOverworld()) {
             return World.Environment.NORMAL;
         }
@@ -134,7 +158,7 @@ public class BornToSurvive extends JavaPlugin {
         if (world == getTheEnd()) {
             return World.Environment.THE_END;
         }
-        throw new IllegalArgumentException("Unknown world.");
+        throw new IllegalArgumentException("Unknown world: " + world);
     }
 
     public User getUserOrNotify(String username, User receiver) {
