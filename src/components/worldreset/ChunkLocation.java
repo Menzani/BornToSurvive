@@ -1,6 +1,7 @@
 package it.menzani.bts.components.worldreset;
 
 import org.bukkit.Chunk;
+import org.bukkit.World;
 
 class ChunkLocation {
     private static final char compactStringSeparatorChar = ',';
@@ -21,13 +22,19 @@ class ChunkLocation {
         return new ChunkLocation(x, z);
     }
 
+    final World world;
     final int x, z;
 
     ChunkLocation(Chunk chunk) {
-        this(chunk.getX(), chunk.getZ());
+        this(chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
     ChunkLocation(int x, int z) {
+        this(null, x, z);
+    }
+
+    ChunkLocation(World world, int x, int z) {
+        this.world = world;
         this.x = x;
         this.z = z;
     }
@@ -51,7 +58,8 @@ class ChunkLocation {
     @Override
     public String toString() {
         return "ChunkLocation{" +
-                "x=" + x +
+                "world=" + world +
+                ", x=" + x +
                 ", z=" + z +
                 '}';
     }

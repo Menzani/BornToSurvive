@@ -18,8 +18,9 @@ class AddChunk implements CheckedSQLDatabaseCallable {
 
     @Override
     public Integer call(Connection connection, Component component) throws SQLException {
-        preparedStatement.setInt(1, chunkLocation.x);
-        preparedStatement.setInt(2, chunkLocation.z);
+        preparedStatement.setObject(1, chunkLocation.world.getUID());
+        preparedStatement.setInt(2, chunkLocation.x);
+        preparedStatement.setInt(3, chunkLocation.z);
         return preparedStatement.executeUpdate();
     }
 

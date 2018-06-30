@@ -2,23 +2,32 @@ package it.menzani.bts.components.worldreset;
 
 import it.menzani.bts.components.Component;
 import it.menzani.bts.persistence.sql.wrapper.SQLDatabaseRunnable;
+import org.bukkit.World;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 class SetChunksReset implements SQLDatabaseRunnable {
     private final PreparedStatement preparedStatement;
-    private final String chunksReset;
+    private final Map<World, String> chunksResetCompact;
 
-    SetChunksReset(PreparedStatement preparedStatement, String chunksReset) {
+    SetChunksReset(PreparedStatement preparedStatement, Map<World, String> chunksResetCompact) {
         this.preparedStatement = preparedStatement;
-        this.chunksReset = chunksReset;
+        this.chunksResetCompact = chunksResetCompact;
     }
 
     @Override
     public void run(Connection connection, Component component) throws SQLException {
-        preparedStatement.setString(1, chunksReset);
+        for (var entry : chunksResetCompact.entrySet()) {
+            updateElement(entry.getKey(), entry.getValue());
+        }
+    }
+
+    private void updateElement(World world, String compactElement) throws SQLException {
+        preparedStatement.setObject(1, world.getUID());
+        preparedStatement.setString(2, compactElement);
         preparedStatement.executeUpdate();
     }
 
@@ -30,7 +39,7 @@ class SetChunksReset implements SQLDatabaseRunnable {
     @Override
     public String toString() {
         return "SetChunksReset{" +
-                "chunksReset='" + chunksReset + '\'' +
+                "chunksResetCompact='" + chunksResetCompact + '\'' +
                 '}';
     }
 }

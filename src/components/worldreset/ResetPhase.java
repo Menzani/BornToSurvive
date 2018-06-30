@@ -7,13 +7,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.ChunkLoadEvent;
 
+import java.util.Map;
 import java.util.Set;
 
 class ResetPhase extends NonePhase {
-    private final Set<?> markedArea;
-    private final Set<ChunkLocation> chunksReset;
+    private final MarkedArea markedArea;
+    private final Map<World, Set<ChunkLocation>> chunksReset;
 
-    ResetPhase(SimpleComponent component, Set<?> markedArea, Set<ChunkLocation> chunksReset) {
+    ResetPhase(SimpleComponent component, MarkedArea markedArea, Map<World, Set<ChunkLocation>> chunksReset) {
         super(component);
         this.markedArea = markedArea;
         this.chunksReset = chunksReset;
@@ -21,20 +22,20 @@ class ResetPhase extends NonePhase {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(ChunkLoadEvent event) {
+        World world = event.getWorld();
         Chunk chunk = event.getChunk();
         ChunkLocation chunkLocation = new ChunkLocation(chunk);
         if (event.isNewChunk()) {
-            chunksReset.add(chunkLocation);
+            chunksReset.get(world).add(chunkLocation);
             return;
         }
-        if (chunksReset.contains(chunkLocation)) {
+        if (chunksReset.get(world).contains(chunkLocation)) {
             return;
         }
-        if (markedArea.contains(chunkLocation)) {
+        if (markedArea.area.get(world).contains(chunkLocation)) {
             return;
         }
-        World world = chunk.getWorld();
         world.regenerateChunk(chunk.getX(), chunk.getZ());
-        chunksReset.add(chunkLocation);
+        chunksReset.get(world).add(chunkLocation);
     }
 }
