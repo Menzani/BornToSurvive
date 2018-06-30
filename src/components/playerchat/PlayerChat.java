@@ -23,11 +23,14 @@ public class PlayerChat extends SimpleComponent {
     }
 
     @Override
-    public void load() {
-        super.load();
-
+    public void loadPreWorld() {
+        super.loadPreWorld();
         nearbyPlayersCache = new NearbyPlayersCache(this, nearbyPlayersDistance);
         nearbyPlayersCache.register();
+    }
+
+    @Override
+    public void load() {
         nearbyPlayersCache.runTaskTimer(Duration.ofMinutes(1));
     }
 

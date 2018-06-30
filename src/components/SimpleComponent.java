@@ -42,8 +42,12 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
     }
 
     @Override
-    public void load() {
+    public void loadPreWorld() {
         register();
+    }
+
+    @Override
+    public void load() {
     }
 
     @Override

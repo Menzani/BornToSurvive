@@ -21,7 +21,7 @@ public class PlayerSpawn extends SimpleComponent {
     }
 
     @Override
-    public void load() {
+    public void loadPreWorld() {
         WrappedSQLDatabase database = getBornToSurvive().getDatabase();
 
         PreparedStatement[] preparedStatements =
@@ -33,7 +33,7 @@ public class PlayerSpawn extends SimpleComponent {
         boolean error = database.execute(new CreateTable(), this);
         if (error) return;
 
-        super.load();
+        super.loadPreWorld();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

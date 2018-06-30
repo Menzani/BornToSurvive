@@ -24,7 +24,6 @@ public class PlayerTeleport extends SimpleComponent {
 
     @Override
     public void load() {
-        super.load();
         registerPlayerCommand("teleport");
 
         ItemStack ticket = new Ticket().getItemStack();

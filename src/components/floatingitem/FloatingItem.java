@@ -31,8 +31,6 @@ public class FloatingItem extends SimpleComponent {
 
     @Override
     public void load() {
-        super.load();
-
         ComponentTask task = new PreventItemDeath(this);
         task.runTaskTimer(Duration.ofMinutes(5).minusSeconds(5));
     }

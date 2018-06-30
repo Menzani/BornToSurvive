@@ -20,6 +20,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,7 +78,9 @@ public class BornToSurvive extends JavaPlugin {
     @Override
     public void onEnable() {
         if (components != null) {
-            components.forEach(Component::load);
+            components.forEach(Component::loadPreWorld);
+            BukkitRunnable task = new ExecutePostWorld(components);
+            task.runTask(this);
         }
     }
 

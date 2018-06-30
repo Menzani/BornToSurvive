@@ -27,6 +27,10 @@ public class WorldReset extends SimpleComponent {
     }
 
     @Override
+    public void loadPreWorld() {
+    }
+
+    @Override
     public void load() {
         if (phase == Phase.NONE) {
             ComponentListener phaseListener = new NonePhase(this);
