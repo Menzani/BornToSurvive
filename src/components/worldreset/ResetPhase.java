@@ -11,12 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 class ResetPhase extends NonePhase {
-    private final MarkedArea markedArea;
     private final Map<World, Set<ChunkLocation>> chunksReset;
 
     ResetPhase(SimpleComponent component, MarkedArea markedArea, Map<World, Set<ChunkLocation>> chunksReset) {
-        super(component);
-        this.markedArea = markedArea;
+        super(component, markedArea);
         this.chunksReset = chunksReset;
     }
 

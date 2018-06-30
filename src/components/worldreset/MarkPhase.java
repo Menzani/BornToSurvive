@@ -7,7 +7,6 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -67,8 +66,7 @@ class MarkPhase extends SimpleComponentListener {
         if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) {
             return true;
         }
-        Sign sign = (Sign) block.getState();
-        return !sign.getLine(0).equals(WorldReset.signText);
+        return !WorldReset.isMark(block.getState());
     }
 
     private void removeChunk(Block block) {

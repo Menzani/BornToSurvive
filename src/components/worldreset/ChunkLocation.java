@@ -39,6 +39,10 @@ class ChunkLocation {
         this.z = z;
     }
 
+    Chunk toChunk() {
+        return world.getChunkAt(x, z);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -43,7 +43,7 @@ class GetMarkedArea implements SQLDatabaseCallable {
         ResultSet resultSet = preparedStatement.executeQuery();
         Set<ChunkLocation> marks = new HashSet<>();
         while (resultSet.next()) {
-            marks.add(new ChunkLocation(resultSet.getInt(1), resultSet.getInt(2)));
+            marks.add(new ChunkLocation(world, resultSet.getInt(1), resultSet.getInt(2)));
         }
         return marks;
     }
