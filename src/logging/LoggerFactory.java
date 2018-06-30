@@ -1,6 +1,7 @@
 package it.menzani.bts.logging;
 
 import it.menzani.logger.Pipeline;
+import it.menzani.logger.api.Level;
 import it.menzani.logger.api.Logger;
 import it.menzani.logger.impl.*;
 
@@ -29,11 +30,13 @@ public class LoggerFactory {
         }
     }
 
-    public Logger createLogger() {
+    public Logger createLogger(Level level) {
         LoggerGroup loggerGroup = new LoggerGroup();
         loggerGroup.addLogger(new SynchronousLogger().addPipeline(new Pipeline()
+                .withVerbosity(level)
                 .addConsumer(new JavaLoggerConsumer(pluginLogger))));
         loggerGroup.addLogger(new AsynchronousLogger().addPipeline(new Pipeline()
+                .withVerbosity(level)
                 .setFormatter(new TimestampFormatter())
                 .addConsumer(new FileConsumer(logFile))));
         return loggerGroup;

@@ -41,13 +41,6 @@ public class BornToSurvive extends JavaPlugin {
     private World overworld, nether, theEnd;
     private Set<World> worlds;
 
-    public BornToSurvive() {
-        LoggerFactory builder = new LoggerFactory(logFile, getLogger());
-        boolean failure = builder.createLogFolder();
-        if (failure) return;
-        logger = builder.createLogger();
-    }
-
     public Logger getRootLogger() {
         return logger;
     }
@@ -66,11 +59,15 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        if (logger == null) return;
-
         MainConfiguration mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();
         if (invalid) return;
+
+        LoggerFactory builder = new LoggerFactory(logFile, getLogger());
+        boolean failure = builder.createLogFolder();
+        if (failure) return;
+        logger = builder.createLogger(mainConfiguration.getLog().getLevel());
+        if (logger == null) return;
 
         File persistenceFolder = new File(getDataFolder(), "persistence");
         propertyStore = new PropertyStore(persistenceFolder);

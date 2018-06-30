@@ -3,10 +3,12 @@ package it.menzani.bts.configuration;
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.worldreset.Phase;
 import it.menzani.bts.persistence.DatabaseCredentials;
-import it.menzani.logger.api.Logger;
+import it.menzani.logger.impl.StandardLevel;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.logging.Logger;
 
 public class MainConfiguration {
     private final FileConfiguration config;
@@ -17,11 +19,16 @@ public class MainConfiguration {
 
         config = bornToSurvive.getConfig();
         config.setDefaults(new MemoryConfiguration()); // Do not use embedded config.yml as a default.
-        logger = bornToSurvive.getRootLogger();
+        logger = bornToSurvive.getLogger();
     }
 
+    private Log log;
     private DatabaseCredentials databaseCredentials;
     private WorldReset worldReset;
+
+    public Log getLog() {
+        return log;
+    }
 
     public DatabaseCredentials getDatabaseCredentials() {
         return databaseCredentials;
@@ -33,12 +40,33 @@ public class MainConfiguration {
 
     public boolean validate() {
         Validation validation = new Validation();
+        log = validateLog(validation);
         databaseCredentials = validateDatabase(validation);
         worldReset = validateWorldReset(validation);
 
         if (validation.isSuccessful()) return false;
-        logger.fatal("config.yml - " + validation);
+        logger.severe("config.yml - " + validation);
         return true;
+    }
+
+    private Log validateLog(Validation validation) {
+        ConfigurationSection log = config.getConfigurationSection("log");
+        if (log == null) {
+            validation.addProblem("log", SimpleProblem.NULL_SECTION);
+            return null;
+        }
+        String levelName = log.getString("level");
+        StandardLevel level = null;
+        if (levelName == null || levelName.isEmpty()) {
+            validation.addProblem(log, "level", SimpleProblem.NULL_OR_EMPTY);
+        } else {
+            try {
+                level = StandardLevel.valueOf(levelName.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                validation.addProblem(log, "level", new EnumParseProblem(StandardLevel.class));
+            }
+        }
+        return new Log(level);
     }
 
     private DatabaseCredentials validateDatabase(Validation validation) {
@@ -84,6 +112,18 @@ public class MainConfiguration {
             }
         }
         return new WorldReset(phase);
+    }
+
+    public static class Log {
+        private final StandardLevel level;
+
+        private Log(StandardLevel level) {
+            this.level = level;
+        }
+
+        public StandardLevel getLevel() {
+            return level;
+        }
     }
 
     public static class WorldReset {
