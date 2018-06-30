@@ -1,5 +1,6 @@
 package it.menzani.bts.components.worldreset;
 
+import it.menzani.bts.Profiler;
 import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
@@ -27,6 +28,8 @@ class NonePhase extends SimpleComponentListener {
 
         Phase lastWorldResetPhase = getBornToSurvive().getPropertyStore().getLastWorldResetPhase();
         if (lastWorldResetPhase != Phase.MARK) return;
+        getLogger().info("Removing marks placed during last mark phase");
+        Profiler profiler = getBornToSurvive().newProfiler("Removing marks");
         markedArea.marks.values().stream()
                 .flatMap(Collection::stream)
                 .map(ChunkLocation::toChunk)
@@ -37,6 +40,7 @@ class NonePhase extends SimpleComponentListener {
                     state.setType(Material.AIR);
                     state.update(true);
                 });
+        profiler.report();
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

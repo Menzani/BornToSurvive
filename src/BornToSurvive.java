@@ -41,6 +41,13 @@ public class BornToSurvive extends JavaPlugin {
     private World overworld, nether, theEnd;
     private Set<World> worlds;
 
+    public BornToSurvive() {
+        LoggerFactory builder = new LoggerFactory(logFile, getLogger());
+        boolean failure = builder.createLogFolder();
+        if (failure) return;
+        logger = builder.createLogger();
+    }
+
     public Logger getRootLogger() {
         return logger;
     }
@@ -55,13 +62,6 @@ public class BornToSurvive extends JavaPlugin {
 
     Set<Component> getComponents() {
         return components;
-    }
-
-    public BornToSurvive() {
-        LoggerFactory builder = new LoggerFactory(logFile, getLogger());
-        boolean failure = builder.createLogFolder();
-        if (failure) return;
-        logger = builder.createLogger();
     }
 
     @Override
@@ -187,5 +187,9 @@ public class BornToSurvive extends JavaPlugin {
             message = message.replace('{' + Integer.toString(i + 1) + '}', players[i].getDisplayName() + ChatColor.RESET);
         }
         getServer().broadcastMessage(message);
+    }
+
+    public Profiler newProfiler(String label) {
+        return new Profiler(logger, label);
     }
 }
