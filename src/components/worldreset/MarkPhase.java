@@ -29,8 +29,8 @@ class MarkPhase extends SimpleComponentListener {
     public void register() {
         super.register();
 
-        Phase lastWorldResetPhase = getBornToSurvive().getPropertyStore().getLastWorldResetPhase();
-        if (lastWorldResetPhase == Phase.MARK) return;
+        Phase lastPhase = getBornToSurvive().getPropertyStore().getWorldReset().getLastPhase();
+        if (lastPhase == Phase.MARK) return;
         getLogger().info("Resetting chunks marked and reset to prepare for new mark phase");
         getBornToSurvive().getDatabase().execute(new PurgeTables(), getComponent());
     }

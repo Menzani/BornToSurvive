@@ -102,11 +102,14 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (database != null) {
-            if (components != null) {
-                components.forEach(Component::unload);
+        if (propertyStore != null) {
+            if (database != null) {
+                if (components != null) {
+                    components.forEach(Component::unload);
+                }
+                database.close();
             }
-            database.close();
+            propertyStore.save();
         }
     }
 

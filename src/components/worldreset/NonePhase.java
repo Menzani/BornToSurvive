@@ -26,8 +26,8 @@ class NonePhase extends SimpleComponentListener {
     public void register() {
         super.register();
 
-        Phase lastWorldResetPhase = getBornToSurvive().getPropertyStore().getLastWorldResetPhase();
-        if (lastWorldResetPhase != Phase.MARK) return;
+        Phase lastPhase = getBornToSurvive().getPropertyStore().getWorldReset().getLastPhase();
+        if (lastPhase != Phase.MARK) return;
         getLogger().info("Removing marks placed during last mark phase");
         Profiler profiler = getBornToSurvive().newProfiler("Removing marks");
         markedArea.marks.values().stream()

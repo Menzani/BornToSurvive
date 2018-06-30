@@ -75,7 +75,7 @@ public class WorldReset extends SimpleComponent {
                 throw new AssertionError();
         }
         phaseListener.register();
-        getBornToSurvive().getPropertyStore().setLastWorldResetPhase(phase);
+        getBornToSurvive().getPropertyStore().getWorldReset().setLastPhase(phase);
     }
 
     private Value<MarkedArea> submitGetMarkedArea(PreparedStatement[] preparedStatements) {
