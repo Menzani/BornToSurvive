@@ -3,7 +3,9 @@ package it.menzani.bts.components.worldreset;
 import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
+import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -36,6 +38,9 @@ class MarkPhase extends SimpleComponentListener {
             block.breakNaturally();
             User player = new User(event.getPlayer());
             player.sendMessageFormat("That chunk is already marked.");
+        } else {
+            World world = block.getWorld();
+            world.playEffect(block.getLocation(), Effect.STEP_SOUND, block.getType());
         }
     }
 
