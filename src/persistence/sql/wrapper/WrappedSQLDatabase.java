@@ -33,20 +33,20 @@ public class WrappedSQLDatabase implements AutoCloseable {
     }
 
     public boolean execute(SQLDatabaseRunnable runnable, Component component) {
-        Object result = submit(runnable, component);
+        Value<Object> result = submit(runnable, component);
         if (result == null) {
             return true;
         }
-        assert result == DatabaseCallable.NULL;
+        assert result.isNull();
         return false;
     }
 
-    public Object submit(SQLDatabaseCallable callable, Component component) {
+    public <T> Value<T> submit(SQLDatabaseCallable<T> callable, Component component) {
         if (isConnectionNotAvailable()) {
             throw new IllegalStateException("Database connection is not available. " +
                     "Always check with #isConnectionNotAvailable() before calling this method.");
         }
-        Object result;
+        T result;
         try {
             result = callable.call(connection, component);
         } catch (SQLException e) {
@@ -56,18 +56,15 @@ public class WrappedSQLDatabase implements AutoCloseable {
             e.printStackTrace();
             return null;
         }
-        if (callable instanceof CheckedSQLDatabaseCallable) {
-            CheckedSQLDatabaseCallable checkedCallable = (CheckedSQLDatabaseCallable) callable;
+        if (callable instanceof CheckedSQLDatabaseCallable<?>) {
+            CheckedSQLDatabaseCallable<T> checkedCallable = (CheckedSQLDatabaseCallable<T>) callable;
             String errorMessage = checkedCallable.doPostCheck(result);
             if (errorMessage != null) {
                 component.getLogger().fatal(errorMessage);
                 return null;
             }
         }
-        if (result == null) {
-            result = DatabaseCallable.NULL;
-        }
-        return result;
+        return new Value<>(result);
     }
 
     @Override

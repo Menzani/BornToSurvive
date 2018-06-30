@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-class PrepareStatements implements SQLDatabaseCallable {
+class PrepareStatements implements SQLDatabaseCallable<PreparedStatement[]> {
     @Override
     public PreparedStatement[] call(Connection connection, Component component) throws SQLException {
         return new PreparedStatement[]{

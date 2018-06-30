@@ -5,11 +5,11 @@ import it.menzani.bts.components.Component;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface SQLDatabaseCallable extends DatabaseCallable {
+public interface SQLDatabaseCallable<R> extends DatabaseCallable<R> {
     @Override
-    default Object call(Object connection, Component component) throws SQLException {
+    default R call(Object connection, Component component) throws SQLException {
         return call((Connection) connection, component);
     }
 
-    Object call(Connection connection, Component component) throws SQLException;
+    R call(Connection connection, Component component) throws SQLException;
 }

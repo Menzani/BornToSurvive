@@ -5,7 +5,7 @@ import it.menzani.bts.components.Component;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface SQLDatabaseRunnable extends DatabaseRunnable, SQLDatabaseCallable {
+public interface SQLDatabaseRunnable extends DatabaseRunnable, SQLDatabaseCallable<Object> {
     @Override
     default void run(Object connection, Component component) throws SQLException {
         run((Connection) connection, component);

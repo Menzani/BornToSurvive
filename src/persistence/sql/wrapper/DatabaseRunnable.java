@@ -2,7 +2,7 @@ package it.menzani.bts.persistence.sql.wrapper;
 
 import it.menzani.bts.components.Component;
 
-public interface DatabaseRunnable extends DatabaseCallable {
+public interface DatabaseRunnable extends DatabaseCallable<Object> {
     void run(Object connection, Component component) throws Exception;
 
     @Override

@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
 
-class SetSpawn implements CheckedSQLDatabaseCallable {
+class SetSpawn implements CheckedSQLDatabaseCallable<Integer> {
     private final PreparedStatement preparedStatement;
     private final UUID playerId;
     private final Spawn spawn;
@@ -29,8 +29,8 @@ class SetSpawn implements CheckedSQLDatabaseCallable {
     }
 
     @Override
-    public String doPostCheck(Object result) {
-        if (result.equals(0) || result.equals(1)) {
+    public String doPostCheck(Integer result) {
+        if (result == 0 || result == 1) {
             return null;
         }
         return "Unexpected query update count." + System.lineSeparator() + "updateCount=" + result + ", context: " + toString();

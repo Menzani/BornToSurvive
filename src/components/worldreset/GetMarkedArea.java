@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-class GetMarkedArea implements SQLDatabaseCallable {
+class GetMarkedArea implements SQLDatabaseCallable<MarkedArea> {
     private final PreparedStatement preparedStatement;
     private final World overworld, nether, theEnd;
 

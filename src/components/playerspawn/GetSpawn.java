@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-class GetSpawn implements SQLDatabaseCallable {
+class GetSpawn implements SQLDatabaseCallable<Spawn> {
     private final PreparedStatement preparedStatement;
     private final UUID playerId;
 

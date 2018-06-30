@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-class GetChunksReset implements SQLDatabaseCallable {
+class GetChunksReset implements SQLDatabaseCallable<Map<World, String>> {
     private final PreparedStatement preparedStatement;
     private final World overworld, nether, theEnd;
 

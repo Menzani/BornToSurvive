@@ -4,6 +4,7 @@ import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.ComponentListener;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentTask;
+import it.menzani.bts.persistence.sql.wrapper.Value;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
@@ -39,37 +40,36 @@ public class WorldReset extends SimpleComponent {
         boolean error = database.execute(new CreateTables(), this);
         if (error) return;
 
-        PreparedStatement[] preparedStatements =
-                (PreparedStatement[]) database.submit(new PrepareStatements(), this);
+        Value<PreparedStatement[]> preparedStatements = database.submit(new PrepareStatements(), this);
         if (preparedStatements == null) return;
         ComponentListener phaseListener;
         switch (phase) {
             case MARK:
-                phaseListener = new MarkPhase(this, preparedStatements[0], preparedStatements[1]);
+                phaseListener = new MarkPhase(this, preparedStatements.get()[0], preparedStatements.get()[1]);
                 break;
             case RESET:
-                MarkedArea markedArea = submitGetMarkedArea(preparedStatements);
+                Value<MarkedArea> markedArea = submitGetMarkedArea(preparedStatements.get());
                 if (markedArea == null) return;
-                Map<?, ?> chunksResetCompact = (Map<?, ?>) database.submit(
-                        new GetChunksReset(preparedStatements[4], getBornToSurvive()), this);
+                Value<Map<World, String>> chunksResetCompact = database.submit(
+                        new GetChunksReset(preparedStatements.get()[4], getBornToSurvive()), this);
                 if (chunksResetCompact == null) return;
 
                 Map<World, Set<ChunkLocation>> chunksReset = new HashMap<>();
-                for (var entry : chunksResetCompact.entrySet()) {
-                    var element = computeChunksResetElement((String) entry.getValue());
+                for (var entry : chunksResetCompact.get().entrySet()) {
+                    var element = computeChunksResetElement(entry.getValue());
                     if (element == null) return;
-                    chunksReset.put((World) entry.getKey(), element);
+                    chunksReset.put(entry.getKey(), element);
                 }
 
-                phaseListener = new ResetPhase(this, markedArea, chunksReset);
-                chunksResetAutosave = new ChunksResetAutosave(this, preparedStatements[3], chunksReset);
+                phaseListener = new ResetPhase(this, markedArea.get(), chunksReset);
+                chunksResetAutosave = new ChunksResetAutosave(this, preparedStatements.get()[3], chunksReset);
                 chunksResetAutosave.runTaskTimerAsynchronously(Duration.ofMinutes(5));
                 break;
             case NONE:
-                markedArea = submitGetMarkedArea(preparedStatements);
+                markedArea = submitGetMarkedArea(preparedStatements.get());
                 if (markedArea == null) return;
 
-                phaseListener = new NonePhase(this, markedArea);
+                phaseListener = new NonePhase(this, markedArea.get());
                 break;
             default:
                 throw new AssertionError();
@@ -78,8 +78,8 @@ public class WorldReset extends SimpleComponent {
         getBornToSurvive().getPropertyStore().setLastWorldResetPhase(phase);
     }
 
-    private MarkedArea submitGetMarkedArea(PreparedStatement[] preparedStatements) {
-        return (MarkedArea) getBornToSurvive().getDatabase().submit(new GetMarkedArea(preparedStatements[2], getBornToSurvive()), this);
+    private Value<MarkedArea> submitGetMarkedArea(PreparedStatement[] preparedStatements) {
+        return getBornToSurvive().getDatabase().submit(new GetMarkedArea(preparedStatements[2], getBornToSurvive()), this);
     }
 
     private Set<ChunkLocation> computeChunksResetElement(String compactElement) {

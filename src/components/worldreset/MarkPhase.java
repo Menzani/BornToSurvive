@@ -3,6 +3,7 @@ package it.menzani.bts.components.worldreset;
 import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
+import it.menzani.bts.persistence.sql.wrapper.Value;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,11 +40,11 @@ class MarkPhase extends SimpleComponentListener {
         if (!event.getLine(0).equals(WorldReset.signText)) return;
         Block block = event.getBlock();
 
-        Integer updateCount = (Integer) getBornToSurvive().getDatabase().submit(new AddChunk(addChunkStatement,
+        Value<Integer> updateCount = getBornToSurvive().getDatabase().submit(new AddChunk(addChunkStatement,
                 new ChunkLocation(block.getChunk())), getComponent());
         if (updateCount == null) return;
 
-        if (updateCount.equals(0)) {
+        if (updateCount.get() == 0) {
             block.breakNaturally();
             User player = new User(event.getPlayer());
             player.sendMessageFormat("That chunk is already marked.");

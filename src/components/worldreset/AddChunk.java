@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-class AddChunk implements CheckedSQLDatabaseCallable {
+class AddChunk implements CheckedSQLDatabaseCallable<Integer> {
     private final PreparedStatement preparedStatement;
     private final ChunkLocation chunkLocation;
 
@@ -25,8 +25,8 @@ class AddChunk implements CheckedSQLDatabaseCallable {
     }
 
     @Override
-    public String doPostCheck(Object result) {
-        if (result.equals(0) || result.equals(1)) {
+    public String doPostCheck(Integer result) {
+        if (result == 0 || result == 1) {
             return null;
         }
         return "Unexpected query update count." + System.lineSeparator() + "updateCount=" + result + ", context: " + toString();
