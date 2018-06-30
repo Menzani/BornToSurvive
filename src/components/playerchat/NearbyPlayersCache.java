@@ -9,10 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.*;
@@ -51,18 +48,24 @@ class NearbyPlayersCache extends SimpleComponentTask implements ComponentListene
         updateCacheLater(player);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        updateCache(player);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        updateCacheLater(player);
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         if (!unnaturalTeleportCauses.contains(event.getCause()) ||
                 event.getFrom().getWorld() != event.getTo().getWorld()) return;
         Player player = event.getPlayer();
         updateCacheLater(player);
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-        Player player = event.getPlayer();
-        updateCache(player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
