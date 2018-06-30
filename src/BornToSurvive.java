@@ -12,6 +12,7 @@ import it.menzani.bts.components.playerteleport.PlayerTeleport;
 import it.menzani.bts.components.worldreset.WorldReset;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
+import it.menzani.bts.persistence.PropertyStore;
 import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.logger.api.Logger;
@@ -22,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -33,6 +35,7 @@ public class BornToSurvive extends JavaPlugin {
     private static final String propertyNotInitialized = "Property has not yet been initialized. Calling from Component#load() will fix this.";
 
     private Logger logger;
+    private PropertyStore propertyStore;
     private WrappedSQLDatabase database;
     private Set<Component> components;
     private World overworld, nether, theEnd;
@@ -40,6 +43,10 @@ public class BornToSurvive extends JavaPlugin {
 
     public Logger getRootLogger() {
         return logger;
+    }
+
+    public PropertyStore getPropertyStore() {
+        return propertyStore;
     }
 
     public WrappedSQLDatabase getDatabase() {
@@ -64,6 +71,11 @@ public class BornToSurvive extends JavaPlugin {
         MainConfiguration mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();
         if (invalid) return;
+
+        File persistenceFolder = new File(getDataFolder(), "persistence");
+        propertyStore = new PropertyStore(persistenceFolder);
+        boolean error = propertyStore.load();
+        if (error) return;
 
         database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), logger);
         if (database.isConnectionNotAvailable()) return;
