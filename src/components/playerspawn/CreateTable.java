@@ -5,12 +5,15 @@ import it.menzani.bts.persistence.sql.wrapper.SQLDatabaseRunnable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 class CreateTable implements SQLDatabaseRunnable {
     @Override
     public void run(Connection connection, Component component) throws SQLException {
-        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() +
-                "(playerId UUID PRIMARY KEY, spawnX INT NOT NULL, spawnY INT NOT NULL, spawnZ INT NOT NULL)");
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + component.getName() +
+                    "(playerId UUID PRIMARY KEY, spawnX INT NOT NULL, spawnY INT NOT NULL, spawnZ INT NOT NULL)");
+        }
     }
 
     @Override

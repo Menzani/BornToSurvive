@@ -5,12 +5,15 @@ import it.menzani.bts.persistence.sql.wrapper.SQLDatabaseRunnable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 class PurgeTables implements SQLDatabaseRunnable {
     @Override
     public void run(Connection connection, Component component) throws SQLException {
-        connection.createStatement().executeUpdate("DELETE FROM " + component.getName() + "_mark");
-        connection.createStatement().executeUpdate("DELETE FROM " + component.getName() + "_reset");
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM " + component.getName() + "_mark");
+            statement.executeUpdate("DELETE FROM " + component.getName() + "_reset");
+        }
     }
 
     @Override

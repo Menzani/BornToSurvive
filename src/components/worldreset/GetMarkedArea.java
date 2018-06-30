@@ -40,10 +40,11 @@ class GetMarkedArea implements SQLDatabaseCallable {
 
     private Set<ChunkLocation> fetchMarks(World world) throws SQLException {
         preparedStatement.setObject(1, world.getUID());
-        ResultSet resultSet = preparedStatement.executeQuery();
         Set<ChunkLocation> marks = new HashSet<>();
-        while (resultSet.next()) {
-            marks.add(new ChunkLocation(world, resultSet.getInt(1), resultSet.getInt(2)));
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                marks.add(new ChunkLocation(world, resultSet.getInt(1), resultSet.getInt(2)));
+            }
         }
         return marks;
     }

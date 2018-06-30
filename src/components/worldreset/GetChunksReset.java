@@ -34,10 +34,11 @@ class GetChunksReset implements SQLDatabaseCallable {
 
     private String fetchElement(World world) throws SQLException {
         preparedStatement.setObject(1, world.getUID());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        boolean validRow = resultSet.next();
-        if (validRow) {
-            return resultSet.getString(1);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            boolean validRow = resultSet.next();
+            if (validRow) {
+                return resultSet.getString(1);
+            }
         }
         return "";
     }

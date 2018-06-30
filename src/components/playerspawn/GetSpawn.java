@@ -21,10 +21,11 @@ class GetSpawn implements SQLDatabaseCallable {
     @Override
     public Spawn call(Connection connection, Component component) throws SQLException {
         preparedStatement.setObject(1, playerId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        boolean validRow = resultSet.next();
-        if (validRow) {
-            return new Spawn(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3));
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            boolean validRow = resultSet.next();
+            if (validRow) {
+                return new Spawn(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3));
+            }
         }
         return null;
     }
