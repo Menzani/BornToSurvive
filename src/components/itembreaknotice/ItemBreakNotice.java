@@ -1,4 +1,4 @@
-package it.menzani.bts.components.playerarmornotice;
+package it.menzani.bts.components.itembreaknotice;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.SimpleComponent;
