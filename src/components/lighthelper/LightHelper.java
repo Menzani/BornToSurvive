@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class LightHelper extends SimpleComponent {
     protected void onCommand(String command, User sender, String[] args) {
         if (cancelIfActive(sender)) {
             ComponentTask task = new DarknessFinder(this, sender);
-            task.runTaskTimer(Duration.ofSeconds(1));
+            task.runTaskTimer();
             tasks.put(sender, task);
         }
     }

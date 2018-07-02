@@ -9,10 +9,15 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
+
 class DarknessFinder extends SimpleComponentTask {
     private static final int range = 8, yRange = 4;
 
     private final Player player;
+    private final Counter counter = newCounter(Duration.ofSeconds(1), false);
+    private final Block[] blocksToHighlight = new Block[(range + 1) * (range + 1) * (yRange + 1)];
+    private int blocksToHighlightLength, blocksToHighlightIndex;
 
     DarknessFinder(SimpleComponent component, Player player) {
         super(component);
@@ -21,32 +26,45 @@ class DarknessFinder extends SimpleComponentTask {
 
     @Override
     public void run() {
-        Location location = player.getLocation();
-        int centerX = location.getBlockX();
-        int centerY = location.getBlockY();
-        int centerZ = location.getBlockZ();
-        World world = player.getWorld();
-        for (int x = centerX - range; x <= centerX + range; x++) {
-            for (int z = centerZ - range; z <= centerZ + range; z++) {
-                int highestY = Math.min(centerY + yRange, world.getHighestBlockYAt(x, z));
-                for (int y = centerY - yRange; y <= highestY; y++) {
-                    Block block = world.getBlockAt(x, y, z);
-                    if (block.getLightLevel() > 7) {
-                        continue;
+        if (counter.tick()) {
+            blocksToHighlightLength = 0;
+            blocksToHighlightIndex = 0;
+
+            Location location = player.getLocation();
+            int centerX = location.getBlockX();
+            int centerY = location.getBlockY();
+            int centerZ = location.getBlockZ();
+            World world = player.getWorld();
+            for (int x = centerX - range; x <= centerX + range; x++) {
+                for (int z = centerZ - range; z <= centerZ + range; z++) {
+                    int highestY = Math.min(centerY + yRange, world.getHighestBlockYAt(x, z));
+                    for (int y = centerY - yRange; y <= highestY; y++) {
+                        Block block = world.getBlockAt(x, y, z);
+                        if (block.getLightFromBlocks() > 7) {
+                            continue;
+                        }
+                        if (!block.getType().isTransparent()) {
+                            continue;
+                        }
+                        if (block.getRelative(BlockFace.DOWN).getType().isTransparent()) {
+                            continue;
+                        }
+                        blocksToHighlight[blocksToHighlightLength++] = block;
                     }
-                    if (!block.getType().isTransparent()) {
-                        continue;
-                    }
-                    if (block.getRelative(BlockFace.DOWN).getType().isTransparent()) {
-                        continue;
-                    }
-                    highlight(x, y, z);
                 }
             }
         }
+
+        long blocksPerTick = blocksToHighlightLength / counter.getActualTicks();
+        if (counter.peekNextTick()) {
+            blocksPerTick += blocksToHighlightLength % counter.getActualTicks();
+        }
+        for (int i = 0; i < blocksPerTick; i++) {
+            highlight(blocksToHighlight[blocksToHighlightIndex++]);
+        }
     }
 
-    private void highlight(double x, double y, double z) {
-        player.spawnParticle(Particle.FLAME, x + 0.5, y + 0.5, z + 0.5, 1, 0, 0, 0, 0);
+    private void highlight(Block block) {
+        player.spawnParticle(Particle.FLAME, block.getX() + 0.5, block.getY() + 0.5, block.getZ() + 0.5, 1, 0, 0, 0, 0);
     }
 }
