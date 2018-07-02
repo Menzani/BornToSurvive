@@ -24,10 +24,6 @@ class NearbyPlayersCache extends SimpleComponentTask implements ComponentListene
 
     NearbyPlayersCache(SimpleComponent component, double distance) {
         super(component);
-        setDistance(distance);
-    }
-
-    void setDistance(double distance) {
         this.distance = Math.pow(distance, 2);
         netherDistance = Math.pow(distance / 8, 2);
     }

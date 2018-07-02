@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
-    private static final double nearbyPlayersDistance = 10000; // In blocks
+    private static final double nearbyPlayersDistance = Double.MAX_VALUE; // In blocks
 
     private NearbyPlayersCache nearbyPlayersCache;
 
@@ -48,11 +48,6 @@ public class PlayerChat extends SimpleComponent {
 
         Player player = event.getPlayer();
         player.setDisplayName(ChatColor.YELLOW + player.getName());
-
-        if (!player.hasPlayedBefore()) {
-            nearbyPlayersCache.setDistance(Double.MAX_VALUE);
-            getBornToSurvive().broadcast("Welcome {1}!", player);
-        }
     }
 
     @EventHandler
