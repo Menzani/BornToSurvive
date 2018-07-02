@@ -24,7 +24,7 @@ public class Profiler {
     public Duration report() {
         Duration duration = stop();
         logger.debug(() -> {
-            String formatted = String.format("%dm %dms", duration.toSecondsPart(), duration.toMillisPart());
+            String formatted = String.format("%ds %dms", duration.toSecondsPart(), duration.toMillisPart());
             return label + " took " + formatted + " to complete.";
         });
         return duration;
