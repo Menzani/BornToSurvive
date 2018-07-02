@@ -66,7 +66,8 @@ public class BornToSurvive extends JavaPlugin {
         LoggerFactory builder = new LoggerFactory(logFile, getLogger());
         boolean failure = builder.createLogFolder();
         if (failure) return;
-        logger = builder.createLogger(mainConfiguration.getLog().getLevel());
+        logger = builder.withLevel(mainConfiguration.getLog().getLevel())
+                .createLogger();
         if (logger == null) return;
 
         File persistenceFolder = new File(getDataFolder(), "persistence");

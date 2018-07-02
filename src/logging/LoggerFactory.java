@@ -12,6 +12,7 @@ import java.nio.file.Path;
 public class LoggerFactory {
     private final Path logFile;
     private final java.util.logging.Logger pluginLogger;
+    private Level level;
 
     public LoggerFactory(Path logFile, java.util.logging.Logger pluginLogger) {
         this.logFile = logFile;
@@ -30,11 +31,20 @@ public class LoggerFactory {
         }
     }
 
-    public Logger createLogger(Level level) {
+    public LoggerFactory withLevel(Level level) {
+        this.level = level;
+        return this;
+    }
+
+    public Logger createLogger() {
+        if (level == null) {
+            throw new IllegalStateException("level has not been initialized.");
+        }
         LoggerGroup loggerGroup = new LoggerGroup();
         loggerGroup.addLogger(new SynchronousLogger().addPipeline(new Pipeline()
                 .withVerbosity(level)
-                .addConsumer(new JavaLoggerConsumer(pluginLogger))));
+                .addConsumer(new JavaLoggerConsumer(pluginLogger))
+                .addConsumer(new HigherVerbosityLevelsConsumer(pluginLogger))));
         loggerGroup.addLogger(new AsynchronousLogger().addPipeline(new Pipeline()
                 .withVerbosity(level)
                 .setFormatter(new TimestampFormatter())
