@@ -5,3 +5,4 @@ main: it.menzani.bts.BornToSurvive
 load: STARTUP
 commands:
   teleport:
+  light:
