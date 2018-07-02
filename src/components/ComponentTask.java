@@ -1,23 +1,23 @@
 package it.menzani.bts.components;
 
-import org.bukkit.scheduler.BukkitTask;
-
 import java.time.Duration;
 
 public interface ComponentTask extends ComponentElement {
-    BukkitTask runTask() throws IllegalArgumentException, IllegalStateException;
+    void runTask() throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskAsynchronously() throws IllegalArgumentException, IllegalStateException;
+    void runTaskAsynchronously() throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskLater(Duration delay) throws IllegalArgumentException, IllegalStateException;
+    void runTaskLater(Duration delay) throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskLaterAsynchronously(Duration delay) throws IllegalArgumentException, IllegalStateException;
+    void runTaskLaterAsynchronously(Duration delay) throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskTimer(Duration period) throws IllegalArgumentException, IllegalStateException;
+    void runTaskTimer(Duration period) throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskTimerAsynchronously(Duration period) throws IllegalArgumentException, IllegalStateException;
+    void runTaskTimerAsynchronously(Duration period) throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskTimer(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
+    void runTaskTimer(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
 
-    BukkitTask runTaskTimerAsynchronously(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
+    void runTaskTimerAsynchronously(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException;
+
+    void cancel();
 }
