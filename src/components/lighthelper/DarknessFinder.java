@@ -46,7 +46,11 @@ class DarknessFinder extends SimpleComponentTask {
                         if (!block.getType().isTransparent()) {
                             continue;
                         }
-                        if (block.getRelative(BlockFace.DOWN).getType().isTransparent()) {
+                        Block blockBelow = block.getRelative(BlockFace.DOWN);
+                        if (blockBelow.isLiquid()) {
+                            continue;
+                        }
+                        if (blockBelow.getType().isTransparent()) {
                             continue;
                         }
                         blocksToHighlight[blocksToHighlightLength++] = block;

@@ -15,8 +15,12 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 import java.sql.PreparedStatement;
+import java.util.EnumSet;
+import java.util.Set;
 
 class MarkPhase extends SimpleComponentListener {
+    private static final Set<Material> signMaterials = EnumSet.of(Material.SIGN_POST, Material.WALL_SIGN);
+
     private final PreparedStatement addChunkStatement, removeChunkStatement;
 
     MarkPhase(SimpleComponent component, PreparedStatement addChunkStatement, PreparedStatement removeChunkStatement) {
@@ -74,10 +78,10 @@ class MarkPhase extends SimpleComponentListener {
     }
 
     private static boolean isNotSign(Block block) {
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) {
-            return true;
+        if (signMaterials.contains(block.getType())) {
+            return !WorldReset.isMark(block.getState());
         }
-        return !WorldReset.isMark(block.getState());
+        return true;
     }
 
     private void removeChunk(Block block) {
