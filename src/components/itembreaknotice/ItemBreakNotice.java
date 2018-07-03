@@ -17,6 +17,7 @@ public class ItemBreakNotice extends SimpleComponent {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        if (event.getDamage() == 0) return;
         ItemStack item = event.getItem();
         Material type = item.getType();
         if (type.getMaxDurability() - item.getDurability() != 9) return;
