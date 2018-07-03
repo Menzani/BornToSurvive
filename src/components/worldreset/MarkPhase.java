@@ -11,11 +11,15 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.sql.PreparedStatement;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 class MarkPhase extends SimpleComponentListener {
@@ -60,28 +64,55 @@ class MarkPhase extends SimpleComponentListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
-        if (isNotSign(block)) return;
-
-        removeChunk(block);
+        checkOne(event.getBlock());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPhysics(BlockPhysicsEvent event) {
         Block block = event.getBlock();
-        if (isNotSign(block)) return;
-        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) block.getState().getData();
-        Block attachedBlock = block.getRelative(sign.getAttachedFace());
-        if (attachedBlock.getType().isSolid()) return;
+        if (!isSign(block)) return;
+        if (getAttachedBlock(block).getType().isSolid()) return;
 
         removeChunk(block);
     }
 
-    private static boolean isNotSign(Block block) {
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        checkAll(event.blockList());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        checkAll(event.blockList());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        checkOne(event.getBlock());
+    }
+
+    private void checkAll(List<Block> blocks) {
+        blocks.stream()
+                .filter(MarkPhase::isSign)
+                .filter(block -> !blocks.contains(getAttachedBlock(block)))
+                .forEach(this::removeChunk);
+    }
+
+    private void checkOne(Block block) {
+        if (!isSign(block)) return;
+        removeChunk(block);
+    }
+
+    private static Block getAttachedBlock(Block sign) {
+        org.bukkit.material.Sign signState = (org.bukkit.material.Sign) sign.getState().getData();
+        return sign.getRelative(signState.getAttachedFace());
+    }
+
+    private static boolean isSign(Block block) {
         if (signMaterials.contains(block.getType())) {
-            return !WorldReset.isMark(block.getState());
+            return WorldReset.isMark(block.getState());
         }
-        return true;
+        return false;
     }
 
     private void removeChunk(Block block) {

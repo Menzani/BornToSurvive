@@ -116,8 +116,8 @@ public class WorldReset extends SimpleComponent {
         chunksResetAutosave.run();
     }
 
-    static boolean isMark(BlockState state) {
-        Sign sign = (Sign) state;
+    static boolean isMark(BlockState signState) {
+        Sign sign = (Sign) signState;
         return sign.getLine(0).equals(signText);
     }
 }
