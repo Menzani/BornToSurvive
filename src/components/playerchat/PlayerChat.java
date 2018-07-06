@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.Set;
 
 public class PlayerChat extends SimpleComponent {
-    private static final double nearbyPlayersDistance = Double.MAX_VALUE; // In blocks
+    private static final double nearbyPlayersDistance = 10000; // In blocks
 
     private NearbyPlayersCache nearbyPlayersCache;
 
