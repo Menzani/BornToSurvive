@@ -2,7 +2,6 @@ package it.menzani.bts.components;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.User;
-import it.menzani.logger.Pipeline;
 import it.menzani.logger.api.Logger;
 import it.menzani.logger.api.PipelineLogger;
 import it.menzani.logger.impl.*;
@@ -25,15 +24,13 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
 
         LoggerGroup loggerGroup = ((LoggerGroup) bornToSurvive.getRootLogger()).clone();
         MessageFormatter formatter = new TagFormatter(getName());
-        firstPipeline(loggerGroup, 0).setFormatter(formatter);
-        firstPipeline(loggerGroup, 1).setFormatter(new TimestampFormatter(new LevelFormatter(formatter)));
+        ((PipelineLogger) loggerGroup.getLogger("bukkit"))
+                .getPipeline("")
+                .setFormatter(formatter);
+        ((PipelineLogger) loggerGroup.getLogger("file"))
+                .getPipeline("")
+                .setFormatter(new TimestampFormatter(new LevelFormatter(formatter)));
         logger = loggerGroup;
-    }
-
-    private static Pipeline firstPipeline(LoggerGroup loggerGroup, int index) {
-        assert index == 0 || index == 1;
-        PipelineLogger logger = (PipelineLogger) loggerGroup.getLoggers().get(index);
-        return logger.getPipelines().get(0);
     }
 
     @Override

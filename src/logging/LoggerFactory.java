@@ -40,15 +40,17 @@ public class LoggerFactory {
         if (level == null) {
             throw new IllegalStateException("level has not been initialized.");
         }
-        LoggerGroup loggerGroup = new LoggerGroup();
-        loggerGroup.addLogger(new SynchronousLogger().addPipeline(new Pipeline()
-                .withVerbosity(level)
-                .addConsumer(new JavaLoggerConsumer(pluginLogger))
-                .addConsumer(new HigherVerbosityLevelsConsumer(pluginLogger))));
-        loggerGroup.addLogger(new AsynchronousLogger().addPipeline(new Pipeline()
-                .withVerbosity(level)
-                .setFormatter(new TimestampFormatter())
-                .addConsumer(new FileConsumer(logFile))));
-        return loggerGroup;
+        return new LoggerGroup()
+                .addLogger(new SynchronousLogger("bukkit")
+                        .addPipeline(new Pipeline("")
+                                .setVerbosity(level)
+                                .addConsumer(new JavaLoggerConsumer(pluginLogger))
+                                .addConsumer(new HigherVerbosityLevelsConsumer(pluginLogger))))
+                .addLogger(new AsynchronousLogger("file")
+                        .addPipeline(new Pipeline("")
+                                .setVerbosity(level)
+                                .setFormatter(new TimestampFormatter())
+                                .addConsumer(new FileConsumer(logFile)))
+                        .setDefaultParallelism());
     }
 }

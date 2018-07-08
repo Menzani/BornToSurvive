@@ -1,5 +1,6 @@
 package it.menzani.bts.logging;
 
+import it.menzani.logger.LogEntry;
 import it.menzani.logger.api.Consumer;
 import it.menzani.logger.api.Level;
 import it.menzani.logger.impl.StandardLevel;
@@ -7,7 +8,7 @@ import it.menzani.logger.impl.StandardLevel;
 import java.util.logging.Logger;
 
 class HigherVerbosityLevelsConsumer implements Consumer {
-    private static final int threshold = StandardLevel.FINE.getVerbosity();
+    private static final Level threshold = StandardLevel.INFORMATION;
 
     private final Logger pluginLogger;
 
@@ -16,8 +17,9 @@ class HigherVerbosityLevelsConsumer implements Consumer {
     }
 
     @Override
-    public void consume(String entry, Level level) {
-        if (level.getVerbosity() < threshold) return;
-        pluginLogger.info(level.getMarker() + " - " + entry);
+    public void consume(LogEntry entry, String formattedEntry) {
+        Level level = entry.getLevel();
+        if (level.compareTo(threshold) != Level.Verbosity.GREATER) return;
+        pluginLogger.info(level.getMarker() + " - " + formattedEntry);
     }
 }
