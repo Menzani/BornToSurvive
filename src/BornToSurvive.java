@@ -2,6 +2,7 @@ package it.menzani.bts;
 
 import it.menzani.bts.components.Component;
 import it.menzani.bts.components.disablecommand.DisableCommand;
+import it.menzani.bts.components.fix.Fix;
 import it.menzani.bts.components.floatingitem.FloatingItem;
 import it.menzani.bts.components.itembreaknotice.ItemBreakNotice;
 import it.menzani.bts.components.lighthelper.LightHelper;
@@ -89,7 +90,8 @@ public class BornToSurvive extends JavaPlugin {
                 new DisableCommand(this),
                 new Optimize(this),
                 new WorldReset(this, mainConfiguration.getWorldReset().getPhase()),
-                new LightHelper(this)
+                new LightHelper(this),
+                new Fix(this)
         );
     }
 
