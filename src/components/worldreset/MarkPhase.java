@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 class MarkPhase extends SimpleComponentListener {
-    private static final Set<Material> signMaterials = EnumSet.of(Material.SIGN_POST, Material.WALL_SIGN);
+    private static final Set<Material> signMaterials = EnumSet.of(Material.SIGN, Material.WALL_SIGN);
 
     private final PreparedStatement addChunkStatement, removeChunkStatement;
 

@@ -1,5 +1,6 @@
 package it.menzani.bts;
 
+import it.menzani.bts.components.ComponentTask;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
@@ -7,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -25,6 +27,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
 import java.net.InetSocketAddress;
+import java.time.Duration;
 import java.util.*;
 
 public class User implements Player {
@@ -45,6 +48,12 @@ public class User implements Player {
             base = base.replace('{' + Integer.toString(i + 1) + '}', ChatColor.GREEN + object.toString() + ChatColor.GRAY);
         }
         sendMessage(messagePrefix + base);
+    }
+
+    public boolean addPotionEffect(PotionEffectType type, Duration duration, int level, PotionEffectParticleType particleType) {
+        if (level < 1) throw new IllegalArgumentException("level must be greater than or equal to 1.");
+        return addPotionEffect(new PotionEffect(type, (int) ComponentTask.ticks(duration, "duration"), --level,
+                particleType.ambient, particleType.particles));
     }
 
     @Override
@@ -211,15 +220,14 @@ public class User implements Player {
     }
 
     @Override
-    @Deprecated
-    public boolean sendChunkChange(Location location, int i, int i1, int i2, byte[] bytes) {
-        return delegate.sendChunkChange(location, i, i1, i2, bytes);
+    public void sendBlockChange(Location location, BlockData blockData) {
+        delegate.sendBlockChange(location, blockData);
     }
 
     @Override
     @Deprecated
-    public void sendBlockChange(Location location, int i, byte b) {
-        delegate.sendBlockChange(location, i, b);
+    public boolean sendChunkChange(Location location, int i, int i1, int i2, byte[] bytes) {
+        return delegate.sendChunkChange(location, i, i1, i2, bytes);
     }
 
     @Override
@@ -1021,6 +1029,16 @@ public class User implements Player {
     }
 
     @Override
+    public boolean isSwimming() {
+        return delegate.isSwimming();
+    }
+
+    @Override
+    public void setSwimming(boolean b) {
+        delegate.setSwimming(b);
+    }
+
+    @Override
     public void setAI(boolean b) {
         delegate.setAI(b);
     }
@@ -1573,5 +1591,18 @@ public class User implements Player {
     @Override
     public String toString() {
         return delegate.toString();
+    }
+
+    public enum PotionEffectParticleType {
+        NORMAL(false, true),
+        AMBIENT(true, true),
+        OFF(false, false);
+
+        private final boolean ambient, particles;
+
+        PotionEffectParticleType(boolean ambient, boolean particles) {
+            this.ambient = ambient;
+            this.particles = particles;
+        }
     }
 }

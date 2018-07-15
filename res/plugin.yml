@@ -1,7 +1,8 @@
 name: BornToSurvive
 author: System_
-version: 1.12.2
+version: 1.13
 main: it.menzani.bts.BornToSurvive
+api-version: 1.13
 load: STARTUP
 commands:
   teleport:

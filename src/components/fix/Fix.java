@@ -1,6 +1,8 @@
 package it.menzani.bts.components.fix;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.User;
+import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.minecartspeed.MinecartSpeed;
 import org.bukkit.Location;
@@ -9,21 +11,22 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.vehicle.VehicleBlockCollisionEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
+import java.time.Duration;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 public class Fix extends SimpleComponent {
-    private static final Set<Material> waterMaterials = EnumSet.of(Material.STATIONARY_WATER, Material.WATER);
-    private static final Set<Material> railMaterials = EnumSet.of(Material.RAILS, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL);
+    private static final Set<Material> railMaterials = EnumSet.of(Material.RAIL, Material.POWERED_RAIL, Material.DETECTOR_RAIL, Material.ACTIVATOR_RAIL);
     private static final BlockFace[] cardinalBlockFaces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
 
     public Fix(BornToSurvive bornToSurvive) {
@@ -32,20 +35,40 @@ public class Fix extends SimpleComponent {
 
     @EventHandler
     public void preventWaterSpawn(PlayerSpawnLocationEvent event) {
-        Player player = event.getPlayer();
+        User player = new User(event.getPlayer());
         if (player.hasPlayedBefore()) return;
         Block spawnBlock = event.getSpawnLocation().getBlock();
-        if (!waterMaterials.contains(spawnBlock.getType())) return;
+        if (!isWater(spawnBlock)) return;
         World world = spawnBlock.getWorld();
         int x = spawnBlock.getX();
         int z = spawnBlock.getZ();
         for (int y = spawnBlock.getY(); y <= world.getSeaLevel(); y++) {
             Block block = world.getBlockAt(x, y, z);
-            if (waterMaterials.contains(block.getType())) continue;
-            event.setSpawnLocation(block.getLocation());
-            // TODO Add potion effect of Slow Falling
+            if (isWater(block)) continue;
+            event.setSpawnLocation(block.getLocation().add(0.5, -0.5, 0.5));
+            giveSlowFallingEffect(player);
             break;
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        if (event.isBedSpawn()) return;
+        Location respawnLocation = event.getRespawnLocation();
+        if (!isWater(respawnLocation.getBlock())) return;
+        event.setRespawnLocation(respawnLocation.add(0, 0.5, 0));
+        User player = new User(event.getPlayer());
+        giveSlowFallingEffect(player);
+    }
+
+    private static boolean isWater(Block block) {
+        return block.getType() == Material.WATER;
+    }
+
+    private void giveSlowFallingEffect(User player) {
+        ComponentTask task = getComponent().newWrappedRunnableTask(() ->
+                player.addPotionEffect(PotionEffectType.SLOW_FALLING, Duration.ofSeconds(8), 1, User.PotionEffectParticleType.OFF));
+        task.runTask();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
