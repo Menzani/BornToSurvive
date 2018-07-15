@@ -55,22 +55,26 @@ public class Fix extends SimpleComponent {
         Block block = event.getBlock();
         Block blockUp = block.getRelative(BlockFace.UP);
         if (!railMaterials.contains(blockUp.getType())) return;
+        outer:
         for (BlockFace blockFace : cardinalBlockFaces) {
             Block rail = block.getRelative(blockFace);
             if (!railMaterials.contains(rail.getType())) continue;
-            List<Entity> passengers = vehicle.getPassengers();
-            Location nextRail = blockUp.getLocation();
-            for (Entity passenger : passengers) {
-                Location location = passenger.getLocation();
-                nextRail.setYaw(location.getYaw());
-                nextRail.setPitch(location.getPitch());
-                passenger.teleport(nextRail);
+            for (BlockFace _blockFace : cardinalBlockFaces) {
+                Block _rail = blockUp.getRelative(_blockFace);
+                if (!railMaterials.contains(_rail.getType())) continue;
+                List<Entity> passengers = vehicle.getPassengers();
+                Location nextRail = _rail.getLocation();
+                for (Entity passenger : passengers) {
+                    Location location = passenger.getLocation();
+                    nextRail.setYaw(location.getYaw());
+                    nextRail.setPitch(location.getPitch());
+                    passenger.teleport(nextRail);
+                }
+                vehicle.teleport(nextRail);
+                passengers.forEach(vehicle::addPassenger);
+                vehicle.setVelocity(new Vector(_blockFace.getModX(), 0, _blockFace.getModZ()));
+                break outer;
             }
-            vehicle.teleport(nextRail);
-            passengers.forEach(vehicle::addPassenger);
-            BlockFace oppositeBlockFace = blockFace.getOppositeFace();
-            vehicle.setVelocity(new Vector(oppositeBlockFace.getModX(), 0, oppositeBlockFace.getModZ()));
-            break;
         }
     }
 }
