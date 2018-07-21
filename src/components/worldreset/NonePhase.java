@@ -35,7 +35,7 @@ class NonePhase extends SimpleComponentListener {
                 .map(ChunkLocation::toChunk)
                 .map(Chunk::getTileEntities)
                 .flatMap(Arrays::stream)
-                .filter(WorldReset::isMark)
+                .filter(MarkPhase::isSign)
                 .forEach(state -> {
                     state.setType(Material.AIR);
                     state.update(true);

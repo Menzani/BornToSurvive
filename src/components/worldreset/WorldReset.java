@@ -7,8 +7,6 @@ import it.menzani.bts.components.SimpleComponentTask;
 import it.menzani.bts.persistence.sql.wrapper.Value;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import org.bukkit.World;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 
 import java.sql.PreparedStatement;
 import java.time.Duration;
@@ -114,10 +112,5 @@ public class WorldReset extends SimpleComponent {
     public void unload() {
         if (chunksResetAutosave == null) return;
         chunksResetAutosave.run();
-    }
-
-    static boolean isMark(BlockState signState) {
-        Sign sign = (Sign) signState;
-        return sign.getLine(0).equals(signText);
     }
 }

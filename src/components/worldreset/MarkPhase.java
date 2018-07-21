@@ -8,6 +8,8 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -110,9 +112,21 @@ class MarkPhase extends SimpleComponentListener {
 
     private static boolean isSign(Block block) {
         if (signMaterials.contains(block.getType())) {
-            return WorldReset.isMark(block.getState());
+            return isMark(block.getState());
         }
         return false;
+    }
+
+    static boolean isSign(BlockState state) {
+        if (signMaterials.contains(state.getType())) {
+            return isMark(state);
+        }
+        return false;
+    }
+
+    private static boolean isMark(BlockState signState) {
+        Sign sign = (Sign) signState;
+        return sign.getLine(0).equals(WorldReset.signText);
     }
 
     private void removeChunk(Block block) {
