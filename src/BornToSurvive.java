@@ -19,6 +19,8 @@ import it.menzani.bts.logging.LoggerFactory;
 import it.menzani.bts.persistence.PropertyStore;
 import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
+import it.menzani.bts.playerexit.PlayerExit;
+import it.menzani.bts.playerexit.PlayerExitListener;
 import it.menzani.logger.api.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -41,6 +43,7 @@ public class BornToSurvive extends JavaPlugin {
     private Logger logger;
     private PropertyStore propertyStore;
     private WrappedSQLDatabase database;
+    private PlayerExit playerExit;
     private Set<Component> components;
     private World overworld, nether, theEnd;
     private Set<World> worlds;
@@ -82,6 +85,7 @@ public class BornToSurvive extends JavaPlugin {
         database = new WrappedSQLDatabase(new PostgreSQLDatabase(mainConfiguration.getDatabaseCredentials()), logger);
         if (database.isConnectionNotAvailable()) return;
 
+        playerExit = new PlayerExit(this);
         components = Set.of(
                 new PlayerSpawn(this),
                 new PlayerChat(this),
@@ -101,6 +105,7 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        playerExit.register();
         if (components != null) {
             components.forEach(Component::loadPreWorld);
 
@@ -113,6 +118,7 @@ public class BornToSurvive extends JavaPlugin {
     public void onDisable() {
         if (propertyStore != null) {
             if (database != null) {
+                playerExit.shutdown();
                 if (components != null) {
                     components.forEach(Component::unload);
                 }
@@ -124,6 +130,9 @@ public class BornToSurvive extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+        if (listener instanceof PlayerExitListener) {
+            playerExit.addListener((PlayerExitListener) listener);
+        }
     }
 
     public World getOverworld() {

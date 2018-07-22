@@ -3,19 +3,20 @@ package it.menzani.bts.components.assistant;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
 import it.menzani.bts.persistence.sql.wrapper.Value;
+import it.menzani.bts.playerexit.PlayerExitEvent;
+import it.menzani.bts.playerexit.PlayerExitListener;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.sql.PreparedStatement;
 import java.util.HashSet;
 import java.util.Set;
 
-class WelcomeGuide extends SimpleComponentListener {
+class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener {
     private final PreparedStatement setWelcomeGuideStatement, getWelcomeGuideStatement;
     private final Set<Player> welcoming = new HashSet<>();
 
@@ -54,8 +55,8 @@ class WelcomeGuide extends SimpleComponentListener {
         player.setSpectatorTarget(null);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    @Override
+    public void onPlayerExit(PlayerExitEvent event) {
         Player player = event.getPlayer();
         boolean contained = welcoming.remove(player);
         if (!contained) return;
