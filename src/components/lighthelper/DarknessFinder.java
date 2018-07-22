@@ -3,6 +3,7 @@ package it.menzani.bts.components.lighthelper;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentTask;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -43,14 +44,14 @@ class DarknessFinder extends SimpleComponentTask {
                         if (block.getLightFromBlocks() > 7) {
                             continue;
                         }
-                        if (!block.getType().isTransparent()) {
+                        if (!isTransparent(block.getType())) {
                             continue;
                         }
                         Block blockBelow = block.getRelative(BlockFace.DOWN);
                         if (blockBelow.isLiquid()) {
                             continue;
                         }
-                        if (blockBelow.getType().isTransparent()) {
+                        if (isTransparent(blockBelow.getType())) {
                             continue;
                         }
                         blocksToHighlight[blocksToHighlightLength++] = block;
@@ -66,6 +67,11 @@ class DarknessFinder extends SimpleComponentTask {
         for (int i = 0; i < blocksPerTick; i++) {
             highlight(blocksToHighlight[blocksToHighlightIndex++]);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private static boolean isTransparent(Material material) {
+        return material.isTransparent();
     }
 
     private void highlight(Block block) {
