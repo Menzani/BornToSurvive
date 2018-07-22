@@ -13,6 +13,7 @@ import it.menzani.bts.components.playerchat.PlayerChat;
 import it.menzani.bts.components.playername.PlayerName;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
+import it.menzani.bts.components.serverview.ServerView;
 import it.menzani.bts.components.worldreset.WorldReset;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
@@ -44,6 +45,7 @@ public class BornToSurvive extends JavaPlugin {
     private WrappedSQLDatabase database;
     private PlayerExit playerExit;
     private Set<Component> components;
+    private String serverName;
     private World overworld, nether, theEnd;
     private Set<World> worlds;
 
@@ -98,7 +100,8 @@ public class BornToSurvive extends JavaPlugin {
                 new LightHelper(this),
                 new Fix(this),
                 new PlayerName(this),
-                new Assistant(this)
+                new Assistant(this),
+                new ServerView(this)
         );
     }
 
@@ -108,6 +111,7 @@ public class BornToSurvive extends JavaPlugin {
         if (components != null) {
             components.forEach(Component::loadPreWorld);
 
+            setServerName(ChatColors.translate(getServer().getServerName()));
             BukkitRunnable task = new ExecutePostWorld(this);
             task.runTask(this);
         }
@@ -132,6 +136,16 @@ public class BornToSurvive extends JavaPlugin {
         if (listener instanceof PlayerExitListener) {
             playerExit.addListener((PlayerExitListener) listener);
         }
+    }
+
+    public String getServerName() {
+        if (serverName == null) throw new IllegalStateException(propertyNotInitialized);
+        return serverName;
+    }
+
+    private void setServerName(String serverName) {
+        if (this.serverName != null) throw new IllegalStateException(propertyInitialized);
+        this.serverName = serverName;
     }
 
     public World getOverworld() {

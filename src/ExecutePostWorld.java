@@ -6,7 +6,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashSet;
 import java.util.Set;
 
 class ExecutePostWorld extends BukkitRunnable {
@@ -38,11 +37,7 @@ class ExecutePostWorld extends BukkitRunnable {
         bornToSurvive.setOverworld(overworld);
         bornToSurvive.setNether(nether);
         bornToSurvive.setTheEnd(theEnd);
-        Set<World> worlds = new HashSet<>();
-        worlds.add(bornToSurvive.getOverworld());
-        worlds.add(bornToSurvive.getNether());
-        worlds.add(bornToSurvive.getTheEnd());
-        bornToSurvive.setWorlds(worlds);
+        bornToSurvive.setWorlds(Set.of(overworld, nether, theEnd));
 
         bornToSurvive.getComponents().forEach(Component::load);
     }
