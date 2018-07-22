@@ -1,6 +1,7 @@
 package it.menzani.bts.components.fix;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.PotionEffects;
 import it.menzani.bts.User;
 import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
@@ -67,7 +68,7 @@ public class Fix extends SimpleComponent {
 
     private void giveSlowFallingEffect(User player) {
         ComponentTask task = getComponent().newWrappedRunnableTask(() ->
-                player.addPotionEffect(PotionEffectType.SLOW_FALLING, Duration.ofSeconds(8), 1, User.PotionEffectParticleType.OFF));
+                player.addPotionEffect(PotionEffectType.SLOW_FALLING, Duration.ofSeconds(8), 1, PotionEffects.ParticleType.OFF));
         task.runTask();
     }
 

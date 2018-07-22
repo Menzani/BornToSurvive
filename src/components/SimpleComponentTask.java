@@ -1,6 +1,7 @@
 package it.menzani.bts.components;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.TickDuration;
 import it.menzani.logger.api.Logger;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -40,22 +41,22 @@ public abstract class SimpleComponentTask extends BukkitRunnable implements Comp
 
     @Override
     public void runTaskLater(Duration delay) throws IllegalArgumentException, IllegalStateException {
-        task = runTaskLater(bornToSurvive, ComponentTask.ticks(delay, "delay"));
+        task = runTaskLater(bornToSurvive, TickDuration.convert(delay, "delay"));
     }
 
     @Override
     public void runTaskLaterAsynchronously(Duration delay) throws IllegalArgumentException, IllegalStateException {
-        task = runTaskLaterAsynchronously(bornToSurvive, ComponentTask.ticks(delay, "delay"));
+        task = runTaskLaterAsynchronously(bornToSurvive, TickDuration.convert(delay, "delay"));
     }
 
     @Override
     public void runTaskTimer() throws IllegalArgumentException, IllegalStateException {
-        runTaskTimer(ONE_TICK);
+        runTaskTimer(TickDuration.ONE_TICK);
     }
 
     @Override
     public void runTaskTimerAsynchronously() throws IllegalArgumentException, IllegalStateException {
-        runTaskTimerAsynchronously(ONE_TICK);
+        runTaskTimerAsynchronously(TickDuration.ONE_TICK);
     }
 
     @Override
@@ -70,14 +71,14 @@ public abstract class SimpleComponentTask extends BukkitRunnable implements Comp
 
     @Override
     public void runTaskTimer(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException {
-        this.period = ComponentTask.ticks(period, "period");
-        task = runTaskTimer(bornToSurvive, ComponentTask.ticks(delay, "delay"), this.period);
+        this.period = TickDuration.convert(period, "period");
+        task = runTaskTimer(bornToSurvive, TickDuration.convert(delay, "delay"), this.period);
     }
 
     @Override
     public void runTaskTimerAsynchronously(Duration delay, Duration period) throws IllegalArgumentException, IllegalStateException {
-        this.period = ComponentTask.ticks(period, "period");
-        task = runTaskTimerAsynchronously(bornToSurvive, ComponentTask.ticks(delay, "delay"), this.period);
+        this.period = TickDuration.convert(period, "period");
+        task = runTaskTimerAsynchronously(bornToSurvive, TickDuration.convert(delay, "delay"), this.period);
     }
 
     @Override
@@ -88,7 +89,7 @@ public abstract class SimpleComponentTask extends BukkitRunnable implements Comp
 
     @Override
     public Counter newCounter(Duration period, boolean hasDelay) {
-        return new SimpleCounter(ComponentTask.ticks(period, "period"), hasDelay);
+        return new SimpleCounter(TickDuration.convert(period, "period"), hasDelay);
     }
 
     @Override

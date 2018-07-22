@@ -1,6 +1,5 @@
 package it.menzani.bts;
 
-import it.menzani.bts.components.ComponentTask;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
@@ -50,10 +49,8 @@ public class User implements Player {
         sendMessage(messagePrefix + base);
     }
 
-    public boolean addPotionEffect(PotionEffectType type, Duration duration, int level, PotionEffectParticleType particleType) {
-        if (level < 1) throw new IllegalArgumentException("level must be greater than or equal to 1.");
-        return addPotionEffect(new PotionEffect(type, (int) ComponentTask.ticks(duration, "duration"), --level,
-                particleType.ambient, particleType.particles));
+    public boolean addPotionEffect(PotionEffectType type, Duration duration, int level, PotionEffects.ParticleType particleType) {
+        return addPotionEffect(PotionEffects.newPotionEffect(type, duration, level, particleType));
     }
 
     @Override
@@ -1591,18 +1588,5 @@ public class User implements Player {
     @Override
     public String toString() {
         return delegate.toString();
-    }
-
-    public enum PotionEffectParticleType {
-        NORMAL(false, true),
-        AMBIENT(true, true),
-        OFF(false, false);
-
-        private final boolean ambient, particles;
-
-        PotionEffectParticleType(boolean ambient, boolean particles) {
-            this.ambient = ambient;
-            this.particles = particles;
-        }
     }
 }
