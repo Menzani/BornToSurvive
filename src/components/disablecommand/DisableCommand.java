@@ -15,7 +15,7 @@ public class DisableCommand extends SimpleComponent {
     private static final Set<String> disabledCommandLabels = Set.of(
             "reload", "rl"
     );
-    private static final String CANCEL_SUFFIX = "------";
+    private static final String cancelSuffix = "------";
 
     public DisableCommand(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
@@ -25,7 +25,7 @@ public class DisableCommand extends SimpleComponent {
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String label = event.getMessage().substring(1);
         if (isDisabled(label) || consoleOnlyCommandLabels.contains(label)) {
-            event.setMessage(label + CANCEL_SUFFIX);
+            event.setMessage(label + cancelSuffix);
         }
     }
 
@@ -33,7 +33,7 @@ public class DisableCommand extends SimpleComponent {
     public void onServerCommand(ServerCommandEvent event) {
         String label = event.getCommand();
         if (isDisabled(label)) {
-            event.setCommand(label + CANCEL_SUFFIX);
+            event.setCommand(label + cancelSuffix);
         }
     }
 

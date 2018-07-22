@@ -22,7 +22,6 @@ import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.bts.playerexit.PlayerExit;
 import it.menzani.bts.playerexit.PlayerExitListener;
 import it.menzani.logger.api.Logger;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -198,13 +197,6 @@ public class BornToSurvive extends JavaPlugin {
             return null;
         }
         return new User(player);
-    }
-
-    public void broadcast(String message, Player... players) {
-        for (int i = 0; i < players.length; i++) {
-            message = message.replace('{' + Integer.toString(i + 1) + '}', players[i].getDisplayName() + ChatColor.RESET);
-        }
-        getServer().broadcastMessage(message);
     }
 
     public Profiler newProfiler(String label) {
