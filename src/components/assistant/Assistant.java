@@ -1,6 +1,7 @@
 package it.menzani.bts.components.assistant;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.User;
 import it.menzani.bts.components.ComponentListener;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.persistence.sql.wrapper.Value;
@@ -14,7 +15,10 @@ import java.sql.PreparedStatement;
 import java.util.Set;
 
 public class Assistant extends SimpleComponent {
+    static final String playCommandLabel = "play";
+
     private PreparedStatement createRowStatement;
+    private WelcomeGuide welcomeGuide;
 
     public Assistant(BornToSurvive bornToSurvive) {
         super(bornToSurvive);
@@ -32,8 +36,19 @@ public class Assistant extends SimpleComponent {
         if (error) return;
 
         super.loadPreWorld();
-        final Set<ComponentListener> listeners = Set.of(new WelcomeGuide(this, preparedStatements.get()[1], preparedStatements.get()[2]));
+        final Set<ComponentListener> listeners = Set.of(
+                welcomeGuide = new WelcomeGuide(this, preparedStatements.get()[1], preparedStatements.get()[2]));
         listeners.forEach(ComponentListener::register);
+    }
+
+    @Override
+    public void load() {
+        registerPlayerCommand(playCommandLabel);
+    }
+
+    @Override
+    protected void onCommand(String command, User sender, String[] args) {
+        welcomeGuide.play(sender);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

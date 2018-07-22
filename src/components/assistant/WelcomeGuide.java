@@ -1,11 +1,14 @@
 package it.menzani.bts.components.assistant;
 
+import it.menzani.bts.User;
+import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
 import it.menzani.bts.components.playerchat.PlayerChat;
 import it.menzani.bts.persistence.sql.wrapper.Value;
 import it.menzani.bts.playerexit.PlayerExitEvent;
 import it.menzani.bts.playerexit.PlayerExitListener;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +20,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.BroadcastMessageEvent;
 
 import java.sql.PreparedStatement;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -65,7 +69,7 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
         Player player = event.getPlayer();
         if (!welcoming.contains(player)) return;
         String label = event.getMessage().substring(1);
-        if (label.equals("play")) return;
+        if (label.equals(Assistant.playCommandLabel)) return;
         event.setCancelled(true);
     }
 
@@ -91,7 +95,33 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
         Player player = event.getPlayer();
         boolean contained = welcoming.remove(player);
         if (!contained) return;
+        play(player);
+    }
+
+    void play(User player) {
+        boolean contained = welcoming.remove(player);
+        if (!contained) {
+            player.sendMessageFormat("You are already playing.");
+            return;
+        }
+        Value<?> updateCount = getBornToSurvive().getDatabase().submit(new SetWelcomeGuide(setWelcomeGuideStatement,
+                player.getUniqueId()), getComponent());
+        if (updateCount == null) return;
+        play((Player) player);
+        ComponentTask task = getComponent().newWrappedRunnableTask(() -> welcome(player));
+        task.runTaskLater(Duration.ofSeconds(1).plusMillis(500));
+    }
+
+    private static void play(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
         player.setFlySpeed(0.1F);
+    }
+
+    private void welcome(Player player) {
+        String serverOwner = getBornToSurvive().getDescription().getAuthors().stream()
+                .findFirst()
+                .orElse("Unknown Owner");
+        player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getServerName() +
+                ChatColor.AQUA + " by " + ChatColor.RESET + serverOwner + ChatColor.AQUA + '!');
     }
 }
