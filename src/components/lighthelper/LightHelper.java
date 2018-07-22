@@ -40,10 +40,10 @@ public class LightHelper extends SimpleComponent {
     }
 
     private boolean cancelIfActive(Player player) {
-        if (!tasks.containsKey(player)) {
+        ComponentTask task = tasks.remove(player);
+        if (task == null) {
             return true;
         }
-        ComponentTask task = tasks.remove(player);
         task.cancel();
         return false;
     }

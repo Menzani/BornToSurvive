@@ -3,8 +3,8 @@ package it.menzani.bts;
 import org.bukkit.ChatColor;
 
 public class ChatColors {
-    public static final String[] REFERENCE = new String[2];
     private static final char altColorChar = '&';
+    public static final String[] REFERENCE = new String[2];
 
     static {
         StringBuilder builder = new StringBuilder();

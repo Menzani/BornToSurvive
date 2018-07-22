@@ -60,9 +60,7 @@ public class PlayerSpawn extends SimpleComponent {
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        if (event.isBedSpawn()) {
-            return;
-        }
+        if (event.isBedSpawn()) return;
         Player player = event.getPlayer();
 
         Value<Spawn> spawn = getBornToSurvive().getDatabase().submit(new GetSpawn(getSpawnStatement, player.getUniqueId()), this);

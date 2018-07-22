@@ -35,11 +35,12 @@ public class WorldReset extends SimpleComponent {
     public void load() {
         WrappedSQLDatabase database = getBornToSurvive().getDatabase();
 
+        Value<PreparedStatement[]> preparedStatements = database.submit(new PrepareStatements(), this);
+        if (preparedStatements == null) return;
+
         boolean error = database.execute(new CreateTables(), this);
         if (error) return;
 
-        Value<PreparedStatement[]> preparedStatements = database.submit(new PrepareStatements(), this);
-        if (preparedStatements == null) return;
         ComponentListener phaseListener;
         switch (phase) {
             case MARK:
