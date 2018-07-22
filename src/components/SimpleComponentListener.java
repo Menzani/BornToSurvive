@@ -2,6 +2,7 @@ package it.menzani.bts.components;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.logger.api.Logger;
+import org.bukkit.event.HandlerList;
 
 public abstract class SimpleComponentListener implements ComponentListener {
     private final SimpleComponent component;
@@ -31,6 +32,11 @@ public abstract class SimpleComponentListener implements ComponentListener {
     @Override
     public void register() {
         bornToSurvive.registerListener(this);
+    }
+
+    @Override
+    public void unregister() {
+        HandlerList.unregisterAll(this);
     }
 
     @Override

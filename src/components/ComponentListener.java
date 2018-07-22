@@ -4,4 +4,6 @@ import org.bukkit.event.Listener;
 
 public interface ComponentListener extends ComponentElement, Listener {
     void register();
+
+    void unregister();
 }
