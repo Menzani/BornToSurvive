@@ -9,6 +9,7 @@ import it.menzani.bts.components.lighthelper.LightHelper;
 import it.menzani.bts.components.minecartspeed.MinecartSpeed;
 import it.menzani.bts.components.optimize.Optimize;
 import it.menzani.bts.components.playerchat.PlayerChat;
+import it.menzani.bts.components.playername.PlayerName;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
 import it.menzani.bts.components.worldreset.WorldReset;
@@ -91,7 +92,8 @@ public class BornToSurvive extends JavaPlugin {
                 new Optimize(this),
                 new WorldReset(this, mainConfiguration.getWorldReset().getPhase()),
                 new LightHelper(this),
-                new Fix(this)
+                new Fix(this),
+                new PlayerName(this)
         );
     }
 

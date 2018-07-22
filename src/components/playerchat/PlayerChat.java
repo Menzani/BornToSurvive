@@ -45,9 +45,6 @@ public class PlayerChat extends SimpleComponent {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
-
-        Player player = event.getPlayer();
-        player.setDisplayName(ChatColor.YELLOW + player.getName());
     }
 
     @EventHandler

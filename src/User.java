@@ -42,7 +42,7 @@ public class User implements Player {
         for (int i = 0; i < important.length; i++) {
             Object object = important[i];
             if (object instanceof Player) {
-                object = ((Player) object).getDisplayName();
+                object = ChatColor.RESET + ((Player) object).getDisplayName();
             }
             base = base.replace('{' + Integer.toString(i + 1) + '}', ChatColor.GREEN + object.toString() + ChatColor.GRAY);
         }
