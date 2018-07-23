@@ -99,8 +99,7 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
     }
 
     void play(User player) {
-        boolean contained = welcoming.remove(player);
-        if (!contained) {
+        if (!welcoming.contains(player)) {
             player.sendMessageFormat("You are already playing.");
             return;
         }
@@ -123,5 +122,6 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
                 .orElse("Unknown Owner");
         player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getServerName() +
                 ChatColor.AQUA + " by " + ChatColor.RESET + serverOwner + ChatColor.AQUA + '!');
+        welcoming.remove(player);
     }
 }
