@@ -45,7 +45,6 @@ public class BornToSurvive extends JavaPlugin {
     private WrappedSQLDatabase database;
     private PlayerExit playerExit;
     private Set<Component> components;
-    private String serverName;
     private World overworld, nether, theEnd;
     private Set<World> worlds;
 
@@ -111,7 +110,6 @@ public class BornToSurvive extends JavaPlugin {
         if (components != null) {
             components.forEach(Component::loadPreWorld);
 
-            setServerName(ChatColors.translate(getServer().getServerName()));
             BukkitRunnable task = new ExecutePostWorld(this);
             task.runTask(this);
         }
@@ -136,16 +134,6 @@ public class BornToSurvive extends JavaPlugin {
         if (listener instanceof PlayerExitListener) {
             playerExit.addListener((PlayerExitListener) listener);
         }
-    }
-
-    public String getServerName() {
-        if (serverName == null) throw new IllegalStateException(propertyNotInitialized);
-        return serverName;
-    }
-
-    private void setServerName(String serverName) {
-        if (this.serverName != null) throw new IllegalStateException(propertyInitialized);
-        this.serverName = serverName;
     }
 
     public World getOverworld() {

@@ -28,11 +28,16 @@ import java.util.Set;
 class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener {
     private final PreparedStatement setWelcomeGuideStatement, getWelcomeGuideStatement;
     private final Set<Player> welcoming = Collections.synchronizedSet(new HashSet<>());
+    private String serverOwner;
 
     WelcomeGuide(SimpleComponent component, PreparedStatement setWelcomeGuideStatement, PreparedStatement getWelcomeGuideStatement) {
         super(component);
         this.setWelcomeGuideStatement = setWelcomeGuideStatement;
         this.getWelcomeGuideStatement = getWelcomeGuideStatement;
+    }
+
+    void setServerOwner(String serverOwner) {
+        this.serverOwner = serverOwner;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -117,10 +122,8 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
     }
 
     private void welcome(Player player) {
-        String serverOwner = getBornToSurvive().getDescription().getAuthors().stream()
-                .findFirst()
-                .orElse("Unknown Owner");
-        player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getServerName() +
+        assert serverOwner != null;
+        player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getServer().getServerName() +
                 ChatColor.AQUA + " by " + ChatColor.RESET + serverOwner + ChatColor.AQUA + '!');
         welcoming.remove(player);
     }

@@ -21,7 +21,7 @@ public class ServerView extends SimpleComponent {
     public void load() {
         motd = ChatColors.translate(
                 getBornToSurvive().getServer().getMotd()
-                        .replace("{SERVER}", getBornToSurvive().getServerName())
+                        .replace("{SERVER}", getBornToSurvive().getServer().getServerName())
                         .replace("{VERSION}", getBornToSurvive().getDescription().getVersion()));
     }
 

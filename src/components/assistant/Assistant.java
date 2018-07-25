@@ -43,6 +43,11 @@ public class Assistant extends SimpleComponent {
 
     @Override
     public void load() {
+        String serverOwner = getBornToSurvive().getDescription().getAuthors().stream()
+                .findFirst()
+                .orElse("Unknown Owner");
+        welcomeGuide.setServerOwner(serverOwner);
+
         registerPlayerCommand(playCommandLabel);
     }
 
