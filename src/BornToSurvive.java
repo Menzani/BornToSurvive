@@ -106,8 +106,8 @@ public class BornToSurvive extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        playerExit.register();
-        if (components != null) {
+        if (playerExit != null) {
+            playerExit.register();
             components.forEach(Component::loadPreWorld);
 
             BukkitRunnable task = new ExecutePostWorld(this);
