@@ -1,8 +1,8 @@
 package it.menzani.bts.logging;
 
-import it.menzani.logger.LogEntry;
 import it.menzani.logger.api.Consumer;
 import it.menzani.logger.api.Level;
+import it.menzani.logger.impl.LogEntry;
 import it.menzani.logger.impl.StandardLevel;
 
 import java.util.logging.Logger;

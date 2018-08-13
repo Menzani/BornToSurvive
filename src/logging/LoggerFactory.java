@@ -1,6 +1,5 @@
 package it.menzani.bts.logging;
 
-import it.menzani.logger.Pipeline;
 import it.menzani.logger.api.Level;
 import it.menzani.logger.api.Logger;
 import it.menzani.logger.impl.*;
@@ -49,7 +48,13 @@ public class LoggerFactory {
                 .addLogger(new AsynchronousLogger("file")
                         .addPipeline(new Pipeline("")
                                 .setVerbosity(level)
-                                .setFormatter(new TimestampFormatter())
+                                .setProducer(new Producer()
+                                        .append('[')
+                                        .append(new TimestampFormatter())
+                                        .append(' ')
+                                        .append(new LevelFormatter())
+                                        .append("] ")
+                                        .append(new MessageFormatter()))
                                 .addConsumer(new FileConsumer(logFile)))
                         .setDefaultParallelism());
     }

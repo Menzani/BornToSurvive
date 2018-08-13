@@ -23,13 +23,22 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
         this.bornToSurvive = bornToSurvive;
 
         LoggerGroup loggerGroup = ((LoggerGroup) bornToSurvive.getRootLogger()).clone();
-        MessageFormatter formatter = new TagFormatter(getName());
+        String tag = '[' + getName() + "] ";
         ((PipelineLogger) loggerGroup.getLogger("bukkit"))
                 .getPipeline("")
-                .setFormatter(formatter);
+                .setProducer(new Producer()
+                        .append(tag)
+                        .append(new MessageFormatter()));
         ((PipelineLogger) loggerGroup.getLogger("file"))
                 .getPipeline("")
-                .setFormatter(new TimestampFormatter(new LevelFormatter(formatter)));
+                .setProducer(new Producer()
+                        .append('[')
+                        .append(new TimestampFormatter())
+                        .append(' ')
+                        .append(new LevelFormatter())
+                        .append("] ")
+                        .append(tag)
+                        .append(new MessageFormatter()));
         logger = loggerGroup;
     }
 
