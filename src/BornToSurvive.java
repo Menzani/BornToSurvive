@@ -119,8 +119,8 @@ public class BornToSurvive extends JavaPlugin {
     public void onDisable() {
         if (propertyStore != null) {
             if (database != null) {
-                playerExit.shutdown();
-                if (components != null) {
+                if (playerExit != null) {
+                    playerExit.shutdown();
                     components.forEach(Component::unload);
                 }
                 database.close();
