@@ -39,10 +39,14 @@ public class PlayerChat extends SimpleComponent {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        String deathMessage = event.getDeathMessage();
+        String deathMessage = ChatColor.GRAY + event.getDeathMessage();
         event.setDeathMessage(null);
         Player player = event.getEntity();
-        player.sendMessage(ChatColor.GRAY + deathMessage);
+        Player killer = player.getKiller();
+        player.sendMessage(deathMessage);
+        if (killer != null) {
+            killer.sendMessage(deathMessage);
+        }
     }
 
     @EventHandler
