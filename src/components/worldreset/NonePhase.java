@@ -5,14 +5,16 @@ import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.SignChangeEvent;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class NonePhase extends SimpleComponentListener {
     final MarkedArea markedArea;
@@ -30,17 +32,44 @@ class NonePhase extends SimpleComponentListener {
         if (lastPhase != Phase.MARK) return;
         getLogger().info("Removing marks placed during last mark phase");
         Profiler profiler = getBornToSurvive().newProfiler("Removing marks");
-        markedArea.marks.values().stream()
+        Set<Location> failures = markedArea.marks.values().stream()
                 .flatMap(Collection::stream)
                 .map(ChunkLocation::toChunk)
                 .map(Chunk::getTileEntities)
                 .flatMap(Arrays::stream)
                 .filter(MarkPhase::isSign)
-                .forEach(state -> {
+                .map(state -> {
                     state.setType(Material.AIR);
-                    state.update(true);
-                });
+                    boolean successful = state.update(true);
+                    if (successful) return null;
+                    assert state.isPlaced();
+                    return state.getLocation();
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         profiler.report();
+
+        if (!failures.isEmpty()) {
+            Map<World, List<Location>> byWorld = failures.stream()
+                    .collect(Collectors.groupingBy(Location::getWorld));
+            StringBuilder builder = new StringBuilder("Could not remove these marks:");
+            for (var entry : byWorld.entrySet()) {
+                builder.append(System.lineSeparator());
+                builder.append("  ");
+                builder.append(entry.getKey().getName());
+                builder.append(':');
+                for (Location location : entry.getValue()) {
+                    builder.append(System.lineSeparator());
+                    builder.append("    ");
+                    builder.append(location.getBlockX());
+                    builder.append(' ');
+                    builder.append(location.getBlockY());
+                    builder.append(' ');
+                    builder.append(location.getBlockZ());
+                }
+            }
+            getLogger().fail(builder);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
