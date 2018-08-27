@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Paper">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="https://destroystokyo.com/javadocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.1.jar!/" />
+    </SOURCES>
+  </library>
+</component>

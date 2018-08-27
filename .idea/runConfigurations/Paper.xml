@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Paper" type="JarApplication" factoryName="JAR Application" singleton="true">
+    <option name="JAR_PATH" value="$PROJECT_DIR$/server/paperclip.jar" />
+    <option name="VM_PARAMETERS" value="-Xms2G -Xmx4G -ea" />
+    <option name="WORKING_DIRECTORY" value="E:\Francesco\Sviluppo\Java\BornToSurvive\server" />
+    <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+    <module name="BornToSurvive" />
+    <method v="2">
+      <option name="BuildArtifacts" enabled="true">
+        <artifact name="BTS" />
+      </option>
+    </method>
+  </configuration>
+</component>

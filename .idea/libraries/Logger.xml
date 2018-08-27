@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="Logger">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/spigot/lib/Logger.jar!/" />
+      <root url="jar://$PROJECT_DIR$/server/lib/Logger.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

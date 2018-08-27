@@ -1,5 +1,9 @@
 package it.menzani.bts;
 
+import com.destroystokyo.paper.Title;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
@@ -7,11 +11,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
@@ -25,6 +32,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.*;
@@ -71,6 +79,36 @@ public class User implements Player {
     @Override
     public void setPlayerListName(String s) {
         delegate.setPlayerListName(s);
+    }
+
+    @Override
+    @Deprecated
+    public String getPlayerListHeader() {
+        return delegate.getPlayerListHeader();
+    }
+
+    @Override
+    @Deprecated
+    public String getPlayerListFooter() {
+        return delegate.getPlayerListFooter();
+    }
+
+    @Override
+    @Deprecated
+    public void setPlayerListHeader(String s) {
+        delegate.setPlayerListHeader(s);
+    }
+
+    @Override
+    @Deprecated
+    public void setPlayerListFooter(String s) {
+        delegate.setPlayerListFooter(s);
+    }
+
+    @Override
+    @Deprecated
+    public void setPlayerListHeaderFooter(String s, String s1) {
+        delegate.setPlayerListHeaderFooter(s, s1);
     }
 
     @Override
@@ -238,6 +276,159 @@ public class User implements Player {
     }
 
     @Override
+    public BanEntry banPlayerFull(String reason) {
+        return delegate.banPlayerFull(reason);
+    }
+
+    @Override
+    public BanEntry banPlayerFull(String reason, String source) {
+        return delegate.banPlayerFull(reason, source);
+    }
+
+    @Override
+    public BanEntry banPlayerFull(String reason, Date expires) {
+        return delegate.banPlayerFull(reason, expires);
+    }
+
+    @Override
+    public BanEntry banPlayerFull(String reason, Date expires, String source) {
+        return delegate.banPlayerFull(reason, expires, source);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, boolean kickPlayer) {
+        return delegate.banPlayerIP(reason, kickPlayer);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, String source, boolean kickPlayer) {
+        return delegate.banPlayerIP(reason, source, kickPlayer);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, Date expires, boolean kickPlayer) {
+        return delegate.banPlayerIP(reason, expires, kickPlayer);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason) {
+        return delegate.banPlayerIP(reason);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, String source) {
+        return delegate.banPlayerIP(reason, source);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, Date expires) {
+        return delegate.banPlayerIP(reason, expires);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, Date expires, String source) {
+        return delegate.banPlayerIP(reason, expires, source);
+    }
+
+    @Override
+    public BanEntry banPlayerIP(String reason, Date expires, String source, boolean kickPlayer) {
+        return delegate.banPlayerIP(reason, expires, source, kickPlayer);
+    }
+
+    @Override
+    public void sendActionBar(String s) {
+        delegate.sendActionBar(s);
+    }
+
+    @Override
+    public void sendActionBar(char c, String s) {
+        delegate.sendActionBar(c, s);
+    }
+
+    @Override
+    public void sendMessage(BaseComponent component) {
+        delegate.sendMessage(component);
+    }
+
+    @Override
+    public void sendMessage(BaseComponent... components) {
+        delegate.sendMessage(components);
+    }
+
+    @Override
+    @Deprecated
+    public void sendMessage(ChatMessageType position, BaseComponent... components) {
+        delegate.sendMessage(position, components);
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(BaseComponent[] baseComponents, BaseComponent[] baseComponents1) {
+        delegate.setPlayerListHeaderFooter(baseComponents, baseComponents1);
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(BaseComponent baseComponent, BaseComponent baseComponent1) {
+        delegate.setPlayerListHeaderFooter(baseComponent, baseComponent1);
+    }
+
+    @Override
+    @Deprecated
+    public void setTitleTimes(int i, int i1, int i2) {
+        delegate.setTitleTimes(i, i1, i2);
+    }
+
+    @Override
+    @Deprecated
+    public void setSubtitle(BaseComponent[] baseComponents) {
+        delegate.setSubtitle(baseComponents);
+    }
+
+    @Override
+    @Deprecated
+    public void setSubtitle(BaseComponent baseComponent) {
+        delegate.setSubtitle(baseComponent);
+    }
+
+    @Override
+    @Deprecated
+    public void showTitle(BaseComponent[] baseComponents) {
+        delegate.showTitle(baseComponents);
+    }
+
+    @Override
+    @Deprecated
+    public void showTitle(BaseComponent baseComponent) {
+        delegate.showTitle(baseComponent);
+    }
+
+    @Override
+    @Deprecated
+    public void showTitle(BaseComponent[] baseComponents, BaseComponent[] baseComponents1, int i, int i1, int i2) {
+        delegate.showTitle(baseComponents, baseComponents1, i, i1, i2);
+    }
+
+    @Override
+    @Deprecated
+    public void showTitle(BaseComponent baseComponent, BaseComponent baseComponent1, int i, int i1, int i2) {
+        delegate.showTitle(baseComponent, baseComponent1, i, i1, i2);
+    }
+
+    @Override
+    public void sendTitle(Title title) {
+        delegate.sendTitle(title);
+    }
+
+    @Override
+    public void updateTitle(Title title) {
+        delegate.updateTitle(title);
+    }
+
+    @Override
+    public void hideTitle() {
+        delegate.hideTitle();
+    }
+
+    @Override
     public void updateInventory() {
         delegate.updateInventory();
     }
@@ -391,8 +582,18 @@ public class User implements Player {
     }
 
     @Override
-    public void giveExp(int i) {
-        delegate.giveExp(i);
+    public void giveExp(int amount) {
+        delegate.giveExp(amount);
+    }
+
+    @Override
+    public void giveExp(int i, boolean b) {
+        delegate.giveExp(i, b);
+    }
+
+    @Override
+    public int applyMending(int i) {
+        return delegate.applyMending(i);
     }
 
     @Override
@@ -549,6 +750,7 @@ public class User implements Player {
     }
 
     @Override
+    @Deprecated
     public void setResourcePack(String s) {
         delegate.setResourcePack(s);
     }
@@ -685,6 +887,61 @@ public class User implements Player {
     }
 
     @Override
+    public boolean getAffectsSpawning() {
+        return delegate.getAffectsSpawning();
+    }
+
+    @Override
+    public void setAffectsSpawning(boolean b) {
+        delegate.setAffectsSpawning(b);
+    }
+
+    @Override
+    public void updateCommands() {
+        delegate.updateCommands();
+    }
+
+    @Override
+    public int getViewDistance() {
+        return delegate.getViewDistance();
+    }
+
+    @Override
+    public void setViewDistance(int i) {
+        delegate.setViewDistance(i);
+    }
+
+    @Override
+    public void setResourcePack(String s, String s1) {
+        delegate.setResourcePack(s, s1);
+    }
+
+    @Override
+    public PlayerResourcePackStatusEvent.Status getResourcePackStatus() {
+        return delegate.getResourcePackStatus();
+    }
+
+    @Override
+    public String getResourcePackHash() {
+        return delegate.getResourcePackHash();
+    }
+
+    @Override
+    public boolean hasResourcePack() {
+        return delegate.hasResourcePack();
+    }
+
+    @Override
+    public PlayerProfile getPlayerProfile() {
+        return delegate.getPlayerProfile();
+    }
+
+    @Override
+    public void setPlayerProfile(PlayerProfile playerProfile) {
+        delegate.setPlayerProfile(playerProfile);
+    }
+
+    @Override
     public Spigot spigot() {
         return delegate.spigot();
     }
@@ -752,6 +1009,11 @@ public class User implements Player {
     @Override
     public void closeInventory() {
         delegate.closeInventory();
+    }
+
+    @Override
+    public void closeInventory(InventoryCloseEvent.Reason reason) {
+        delegate.closeInventory(reason);
     }
 
     @Override
@@ -827,6 +1089,16 @@ public class User implements Player {
     }
 
     @Override
+    public Entity releaseLeftShoulderEntity() {
+        return delegate.releaseLeftShoulderEntity();
+    }
+
+    @Override
+    public Entity releaseRightShoulderEntity() {
+        return delegate.releaseRightShoulderEntity();
+    }
+
+    @Override
     @Deprecated
     public Entity getShoulderEntityLeft() {
         return delegate.getShoulderEntityLeft();
@@ -848,6 +1120,11 @@ public class User implements Player {
     @Deprecated
     public void setShoulderEntityRight(Entity entity) {
         delegate.setShoulderEntityRight(entity);
+    }
+
+    @Override
+    public void openSign(Sign sign) {
+        delegate.openSign(sign);
     }
 
     @Override
@@ -933,6 +1210,11 @@ public class User implements Player {
     @Override
     public Player getKiller() {
         return delegate.getKiller();
+    }
+
+    @Override
+    public void setKiller(@Nullable Player player) {
+        delegate.setKiller(player);
     }
 
     @Override
@@ -1036,6 +1318,12 @@ public class User implements Player {
     }
 
     @Override
+    @Deprecated
+    public boolean isRiptiding() {
+        return delegate.isRiptiding();
+    }
+
+    @Override
     public void setAI(boolean b) {
         delegate.setAI(b);
     }
@@ -1053,6 +1341,41 @@ public class User implements Player {
     @Override
     public boolean isCollidable() {
         return delegate.isCollidable();
+    }
+
+    @Override
+    public int getArrowsStuck() {
+        return delegate.getArrowsStuck();
+    }
+
+    @Override
+    public void setArrowsStuck(int i) {
+        delegate.setArrowsStuck(i);
+    }
+
+    @Override
+    public int getShieldBlockingDelay() {
+        return delegate.getShieldBlockingDelay();
+    }
+
+    @Override
+    public void setShieldBlockingDelay(int i) {
+        delegate.setShieldBlockingDelay(i);
+    }
+
+    @Override
+    public ItemStack getActiveItem() {
+        return delegate.getActiveItem();
+    }
+
+    @Override
+    public int getItemUseRemainingTime() {
+        return delegate.getItemUseRemainingTime();
+    }
+
+    @Override
+    public int getHandRaisedTime() {
+        return delegate.getHandRaisedTime();
     }
 
     @Override
@@ -1163,6 +1486,18 @@ public class User implements Player {
     @Override
     public Server getServer() {
         return delegate.getServer();
+    }
+
+    @Override
+    @Deprecated
+    public boolean isPersistent() {
+        return delegate.isPersistent();
+    }
+
+    @Override
+    @Deprecated
+    public void setPersistent(boolean b) {
+        delegate.setPersistent(b);
     }
 
     @Override
@@ -1340,6 +1675,21 @@ public class User implements Player {
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
         return delegate.getPistonMoveReaction();
+    }
+
+    @Override
+    public Location getOrigin() {
+        return delegate.getOrigin();
+    }
+
+    @Override
+    public boolean fromMobSpawner() {
+        return delegate.fromMobSpawner();
+    }
+
+    @Override
+    public Chunk getChunk() {
+        return delegate.getChunk();
     }
 
     @Override
@@ -1531,6 +1881,31 @@ public class User implements Player {
     }
 
     @Override
+    public BanEntry banPlayer(String reason) {
+        return delegate.banPlayer(reason);
+    }
+
+    @Override
+    public BanEntry banPlayer(String reason, String source) {
+        return delegate.banPlayer(reason, source);
+    }
+
+    @Override
+    public BanEntry banPlayer(String reason, Date expires) {
+        return delegate.banPlayer(reason, expires);
+    }
+
+    @Override
+    public BanEntry banPlayer(String reason, Date expires, String source) {
+        return delegate.banPlayer(reason, expires, source);
+    }
+
+    @Override
+    public BanEntry banPlayer(String reason, Date expires, String source, boolean kickIfOnline) {
+        return delegate.banPlayer(reason, expires, source, kickIfOnline);
+    }
+
+    @Override
     public boolean isWhitelisted() {
         return delegate.isWhitelisted();
     }
@@ -1573,6 +1948,17 @@ public class User implements Player {
     @Override
     public Set<String> getListeningPluginChannels() {
         return delegate.getListeningPluginChannels();
+    }
+
+    @Override
+    public int getProtocolVersion() {
+        return delegate.getProtocolVersion();
+    }
+
+    @Override
+    @Nullable
+    public InetSocketAddress getVirtualHost() {
+        return delegate.getVirtualHost();
     }
 
     @Override

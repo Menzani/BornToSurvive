@@ -1,6 +1,6 @@
 name: BornToSurvive
 author: System_
-version: 1.13
+version: 1.13.1
 main: it.menzani.bts.BornToSurvive
 api-version: 1.13
 load: STARTUP
