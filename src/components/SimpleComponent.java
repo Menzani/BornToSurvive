@@ -29,8 +29,8 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
                 .setProducer(new Producer()
                         .append(tag)
                         .append(new MessageFormatter()));
-        ((PipelineLogger) loggerGroup.getLogger("file"))
-                .getPipeline("")
+        AsynchronousLogger file = (AsynchronousLogger) loggerGroup.getLogger("file");
+        file.getPipeline("")
                 .setProducer(new Producer()
                         .append('[')
                         .append(new TimestampFormatter())
@@ -39,6 +39,7 @@ public abstract class SimpleComponent extends SimpleComponentListener implements
                         .append("] ")
                         .append(tag)
                         .append(new MessageFormatter()));
+        file.setDefaultParallelism();
         logger = loggerGroup;
     }
 
