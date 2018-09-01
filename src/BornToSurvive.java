@@ -32,8 +32,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class BornToSurvive extends JavaPlugin {
     private static final Path logFile = Paths.get("logs", "bts", "bts.log");
@@ -169,9 +169,9 @@ public class BornToSurvive extends JavaPlugin {
         this.theEnd = theEnd;
     }
 
-    public Stream<World> getWorlds() {
+    public Set<World> getWorlds() {
         if (worlds == null) throw new IllegalStateException(propertyNotInitialized);
-        return worlds.stream();
+        return Collections.unmodifiableSet(worlds);
     }
 
     void setWorlds(Set<World> worlds) {

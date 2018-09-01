@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -37,10 +38,9 @@ public class PlayerChat extends SimpleComponent {
         nearbyPlayersCache.runTaskTimer(Duration.ofMinutes(1));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event) {
         String deathMessage = ChatColor.GRAY + event.getDeathMessage();
-        event.setDeathMessage(null);
         Player player = event.getEntity();
         Player killer = player.getKiller();
         player.sendMessage(deathMessage);

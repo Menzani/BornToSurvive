@@ -13,7 +13,7 @@ class PreventItemDeath extends SimpleComponentTask {
 
     @Override
     public void run() {
-        FloatingItem.processEntities(getBornToSurvive().getWorlds()
+        FloatingItem.processEntities(getBornToSurvive().getWorlds().stream()
                 .map(World::getEntities)
                 .flatMap(Collection::stream));
     }
