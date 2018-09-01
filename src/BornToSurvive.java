@@ -68,7 +68,10 @@ public class BornToSurvive extends JavaPlugin {
     public void onLoad() {
         MainConfiguration mainConfiguration = new MainConfiguration(this);
         boolean invalid = mainConfiguration.validate();
-        if (invalid) return;
+        if (invalid) {
+            getServer().shutdown();
+            return;
+        }
 
         LoggerFactory builder = new LoggerFactory(logFile, getLogger());
         boolean failure = builder.createLogFolder();
