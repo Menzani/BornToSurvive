@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 public class ItemBreakNotice extends SimpleComponent {
     public ItemBreakNotice(BornToSurvive bornToSurvive) {
@@ -20,7 +21,8 @@ public class ItemBreakNotice extends SimpleComponent {
         if (event.getDamage() == 0) return;
         ItemStack item = event.getItem();
         Material type = item.getType();
-        if (type.getMaxDurability() - item.getDurability() != 9) return;
+        Damageable meta = (Damageable) item.getItemMeta();
+        if (type.getMaxDurability() - meta.getDamage() != 9) return;
         Player player = event.getPlayer();
         player.sendMessage("Your " + ChatColor.BLUE + prettifyMaterialName(type.name()) + ChatColor.RESET + " will break soon!");
     }

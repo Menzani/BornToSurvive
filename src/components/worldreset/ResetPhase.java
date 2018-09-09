@@ -33,7 +33,12 @@ class ResetPhase extends NonePhase {
         if (markedArea.area.get(world).contains(chunkLocation)) {
             return;
         }
-        world.regenerateChunk(chunk.getX(), chunk.getZ());
+        regenerate(world, chunk);
         chunksReset.get(world).add(chunkLocation);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void regenerate(World world, Chunk chunk) {
+        world.regenerateChunk(chunk.getX(), chunk.getZ());
     }
 }
