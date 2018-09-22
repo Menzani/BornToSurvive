@@ -22,6 +22,7 @@ import it.menzani.bts.persistence.sql.PostgreSQLDatabase;
 import it.menzani.bts.persistence.sql.wrapper.WrappedSQLDatabase;
 import it.menzani.bts.playerexit.PlayerExit;
 import it.menzani.bts.playerexit.PlayerExitListener;
+import it.menzani.logger.Profiler;
 import it.menzani.logger.api.Logger;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -47,6 +48,7 @@ public class BornToSurvive extends JavaPlugin {
     private Set<Component> components;
     private World overworld, nether, theEnd;
     private Set<World> worlds;
+    private Profiler.Builder profilerBuilder;
 
     public Logger getRootLogger() {
         return logger;
@@ -79,6 +81,7 @@ public class BornToSurvive extends JavaPlugin {
         logger = builder.withLevel(mainConfiguration.getLog().getLevel())
                 .createLogger();
         if (logger == null) return;
+        profilerBuilder = Profiler.builder().withLogger(logger);
 
         File persistenceFolder = new File(getDataFolder(), "persistence");
         propertyStore = new PropertyStore(persistenceFolder);
@@ -205,6 +208,6 @@ public class BornToSurvive extends JavaPlugin {
     }
 
     public Profiler newProfiler(String label) {
-        return new Profiler(logger, label);
+        return profilerBuilder.withLabel(label).build();
     }
 }

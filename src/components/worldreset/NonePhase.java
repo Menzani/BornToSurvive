@@ -1,9 +1,9 @@
 package it.menzani.bts.components.worldreset;
 
-import it.menzani.bts.Profiler;
 import it.menzani.bts.User;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.SimpleComponentListener;
+import it.menzani.logger.Profiler;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,23 +31,24 @@ class NonePhase extends SimpleComponentListener {
         Phase lastPhase = getBornToSurvive().getPropertyStore().getWorldReset().getLastPhase();
         if (lastPhase != Phase.MARK) return;
         getLogger().info("Removing marks placed during last mark phase");
-        Profiler profiler = getBornToSurvive().newProfiler("Removing marks");
-        Set<Location> failures = markedArea.marks.values().stream()
-                .flatMap(Collection::stream)
-                .map(ChunkLocation::toChunk)
-                .map(Chunk::getTileEntities)
-                .flatMap(Arrays::stream)
-                .filter(MarkPhase::isSign)
-                .map(state -> {
-                    state.setType(Material.AIR);
-                    boolean successful = state.update(true);
-                    if (successful) return null;
-                    assert state.isPlaced();
-                    return state.getLocation();
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-        profiler.report();
+        Set<Location> failures;
+        try (Profiler ignored = getBornToSurvive().newProfiler("Removing marks")) {
+            failures = markedArea.marks.values().stream()
+                    .flatMap(Collection::stream)
+                    .map(ChunkLocation::toChunk)
+                    .map(Chunk::getTileEntities)
+                    .flatMap(Arrays::stream)
+                    .filter(MarkPhase::isSign)
+                    .map(state -> {
+                        state.setType(Material.AIR);
+                        boolean successful = state.update(true);
+                        if (successful) return null;
+                        assert state.isPlaced();
+                        return state.getLocation();
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        }
 
         if (!failures.isEmpty()) {
             Map<World, List<Location>> byWorld = failures.stream()
