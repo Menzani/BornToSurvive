@@ -4,6 +4,8 @@
       <root url="jar://$PROJECT_DIR$/server/lib/Logger.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/server/lib/Logger-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

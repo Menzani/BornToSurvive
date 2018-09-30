@@ -1,6 +1,7 @@
 package it.menzani.bts;
 
 import com.destroystokyo.paper.Title;
+import com.destroystokyo.paper.block.TargetBlockInfo;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -10,6 +11,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
@@ -82,31 +84,26 @@ public class User implements Player {
     }
 
     @Override
-    @Deprecated
     public String getPlayerListHeader() {
         return delegate.getPlayerListHeader();
     }
 
     @Override
-    @Deprecated
     public String getPlayerListFooter() {
         return delegate.getPlayerListFooter();
     }
 
     @Override
-    @Deprecated
     public void setPlayerListHeader(String s) {
         delegate.setPlayerListHeader(s);
     }
 
     @Override
-    @Deprecated
     public void setPlayerListFooter(String s) {
         delegate.setPlayerListFooter(s);
     }
 
     @Override
-    @Deprecated
     public void setPlayerListHeaderFooter(String s, String s1) {
         delegate.setPlayerListHeaderFooter(s, s1);
     }
@@ -1153,6 +1150,42 @@ public class User implements Player {
     }
 
     @Override
+    @Nullable
+    public Block getTargetBlock(int maxDistance) {
+        return delegate.getTargetBlock(maxDistance);
+    }
+
+    @Override
+    @Nullable
+    public Block getTargetBlock(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return delegate.getTargetBlock(i, fluidMode);
+    }
+
+    @Override
+    @Nullable
+    public BlockFace getTargetBlockFace(int maxDistance) {
+        return delegate.getTargetBlockFace(maxDistance);
+    }
+
+    @Override
+    @Nullable
+    public BlockFace getTargetBlockFace(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return delegate.getTargetBlockFace(i, fluidMode);
+    }
+
+    @Override
+    @Nullable
+    public TargetBlockInfo getTargetBlockInfo(int maxDistance) {
+        return delegate.getTargetBlockInfo(maxDistance);
+    }
+
+    @Override
+    @Nullable
+    public TargetBlockInfo getTargetBlockInfo(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return delegate.getTargetBlockInfo(i, fluidMode);
+    }
+
+    @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> set, int i) {
         return delegate.getLastTwoTargetBlocks(set, i);
     }
@@ -1318,7 +1351,6 @@ public class User implements Player {
     }
 
     @Override
-    @Deprecated
     public boolean isRiptiding() {
         return delegate.isRiptiding();
     }
@@ -1675,6 +1707,11 @@ public class User implements Player {
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
         return delegate.getPistonMoveReaction();
+    }
+
+    @Override
+    public BlockFace getFacing() {
+        return delegate.getFacing();
     }
 
     @Override

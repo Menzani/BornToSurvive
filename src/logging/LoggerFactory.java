@@ -45,7 +45,7 @@ public class LoggerFactory {
                                 .setVerbosity(level)
                                 .addConsumer(new JavaLoggerConsumer(pluginLogger))
                                 .addConsumer(new HigherVerbosityLevelsConsumer(pluginLogger))))
-                .addLogger(new AsynchronousLogger("file")
+                .addLogger(new ParallelLogger("file")
                         .addPipeline(new Pipeline("")
                                 .setVerbosity(level)
                                 .setProducer(new Producer()
