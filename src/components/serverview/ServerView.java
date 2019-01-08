@@ -5,7 +5,7 @@ import it.menzani.bts.ChatColors;
 import it.menzani.bts.components.SimpleComponent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
 public class ServerView extends SimpleComponent {
@@ -41,8 +41,8 @@ public class ServerView extends SimpleComponent {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void ignoreMaxPlayers(AsyncPlayerPreLoginEvent event) {
-        if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.KICK_FULL) return;
+    public void ignoreMaxPlayers(PlayerLoginEvent event) {
+        if (event.getResult() != PlayerLoginEvent.Result.KICK_FULL) return;
         event.allow();
     }
 }
