@@ -2,6 +2,7 @@ package it.menzani.bts;
 
 import com.destroystokyo.paper.Title;
 import com.destroystokyo.paper.block.TargetBlockInfo;
+import com.destroystokyo.paper.entity.TargetEntityInfo;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -32,12 +33,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class User implements Player {
     private static final String messagePrefix = ChatColor.BLUE + "BTS> " + ChatColor.GRAY;
@@ -659,21 +663,6 @@ public class User implements Player {
     }
 
     @Override
-    public Location getBedSpawnLocation() {
-        return delegate.getBedSpawnLocation();
-    }
-
-    @Override
-    public void setBedSpawnLocation(Location location) {
-        delegate.setBedSpawnLocation(location);
-    }
-
-    @Override
-    public void setBedSpawnLocation(Location location, boolean b) {
-        delegate.setBedSpawnLocation(location, b);
-    }
-
-    @Override
     public boolean getAllowFlight() {
         return delegate.getAllowFlight();
     }
@@ -879,6 +868,11 @@ public class User implements Player {
     }
 
     @Override
+    public int getClientViewDistance() {
+        return delegate.getClientViewDistance();
+    }
+
+    @Override
     public String getLocale() {
         return delegate.getLocale();
     }
@@ -919,6 +913,7 @@ public class User implements Player {
     }
 
     @Override
+    @Deprecated
     public String getResourcePackHash() {
         return delegate.getResourcePackHash();
     }
@@ -936,6 +931,21 @@ public class User implements Player {
     @Override
     public void setPlayerProfile(PlayerProfile playerProfile) {
         delegate.setPlayerProfile(playerProfile);
+    }
+
+    @Override
+    public float getCooldownPeriod() {
+        return delegate.getCooldownPeriod();
+    }
+
+    @Override
+    public float getCooledAttackStrength(float v) {
+        return delegate.getCooledAttackStrength(v);
+    }
+
+    @Override
+    public void resetCooldown() {
+        delegate.resetCooldown();
     }
 
     @Override
@@ -1061,6 +1071,36 @@ public class User implements Player {
     }
 
     @Override
+    public Location getBedSpawnLocation() {
+        return delegate.getBedSpawnLocation();
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location location) {
+        delegate.setBedSpawnLocation(location);
+    }
+
+    @Override
+    public void setBedSpawnLocation(Location location, boolean b) {
+        delegate.setBedSpawnLocation(location, b);
+    }
+
+    @Override
+    public boolean sleep(Location location, boolean b) {
+        return delegate.sleep(location, b);
+    }
+
+    @Override
+    public void wakeup(boolean b) {
+        delegate.wakeup(b);
+    }
+
+    @Override
+    public Location getBedLocation() {
+        return delegate.getBedLocation();
+    }
+
+    @Override
     public GameMode getGameMode() {
         return delegate.getGameMode();
     }
@@ -1093,6 +1133,26 @@ public class User implements Player {
     @Override
     public Entity releaseRightShoulderEntity() {
         return delegate.releaseRightShoulderEntity();
+    }
+
+    @Override
+    public boolean discoverRecipe(NamespacedKey namespacedKey) {
+        return delegate.discoverRecipe(namespacedKey);
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> collection) {
+        return delegate.discoverRecipes(collection);
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey namespacedKey) {
+        return delegate.undiscoverRecipe(namespacedKey);
+    }
+
+    @Override
+    public int undiscoverRecipes(Collection<NamespacedKey> collection) {
+        return delegate.undiscoverRecipes(collection);
     }
 
     @Override
@@ -1186,8 +1246,52 @@ public class User implements Player {
     }
 
     @Override
+    @Nullable
+    public Entity getTargetEntity(int maxDistance) {
+        return delegate.getTargetEntity(maxDistance);
+    }
+
+    @Override
+    @Nullable
+    public Entity getTargetEntity(int i, boolean b) {
+        return delegate.getTargetEntity(i, b);
+    }
+
+    @Override
+    @Nullable
+    public TargetEntityInfo getTargetEntityInfo(int maxDistance) {
+        return delegate.getTargetEntityInfo(maxDistance);
+    }
+
+    @Override
+    @Nullable
+    public TargetEntityInfo getTargetEntityInfo(int i, boolean b) {
+        return delegate.getTargetEntityInfo(i, b);
+    }
+
+    @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> set, int i) {
         return delegate.getLastTwoTargetBlocks(set, i);
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i) {
+        return delegate.getTargetBlockExact(i);
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i, FluidCollisionMode fluidCollisionMode) {
+        return delegate.getTargetBlockExact(i, fluidCollisionMode);
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double v) {
+        return delegate.rayTraceBlocks(v);
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double v, FluidCollisionMode fluidCollisionMode) {
+        return delegate.rayTraceBlocks(v, fluidCollisionMode);
     }
 
     @Override
@@ -1416,6 +1520,44 @@ public class User implements Player {
     }
 
     @Override
+    public void damage(double v) {
+        delegate.damage(v);
+    }
+
+    @Override
+    public void damage(double v, Entity entity) {
+        delegate.damage(v, entity);
+    }
+
+    @Override
+    public double getHealth() {
+        return delegate.getHealth();
+    }
+
+    @Override
+    public void setHealth(double v) {
+        delegate.setHealth(v);
+    }
+
+    @Override
+    @Deprecated
+    public double getMaxHealth() {
+        return delegate.getMaxHealth();
+    }
+
+    @Override
+    @Deprecated
+    public void setMaxHealth(double v) {
+        delegate.setMaxHealth(v);
+    }
+
+    @Override
+    @Deprecated
+    public void resetMaxHealth() {
+        delegate.resetMaxHealth();
+    }
+
+    @Override
     public Location getLocation() {
         return delegate.getLocation();
     }
@@ -1446,6 +1588,11 @@ public class User implements Player {
     }
 
     @Override
+    public BoundingBox getBoundingBox() {
+        return delegate.getBoundingBox();
+    }
+
+    @Override
     public boolean isOnGround() {
         return delegate.isOnGround();
     }
@@ -1473,6 +1620,16 @@ public class User implements Player {
     @Override
     public boolean teleport(Entity entity, PlayerTeleportEvent.TeleportCause teleportCause) {
         return delegate.teleport(entity, teleportCause);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> teleportAsync(Location loc) {
+        return delegate.teleportAsync(loc);
+    }
+
+    @Override
+    public CompletableFuture<Boolean> teleportAsync(Location loc, PlayerTeleportEvent.TeleportCause cause) {
+        return delegate.teleportAsync(loc, cause);
     }
 
     @Override
@@ -1835,44 +1992,6 @@ public class User implements Player {
     }
 
     @Override
-    public void damage(double v) {
-        delegate.damage(v);
-    }
-
-    @Override
-    public void damage(double v, Entity entity) {
-        delegate.damage(v, entity);
-    }
-
-    @Override
-    public double getHealth() {
-        return delegate.getHealth();
-    }
-
-    @Override
-    public void setHealth(double v) {
-        delegate.setHealth(v);
-    }
-
-    @Override
-    @Deprecated
-    public double getMaxHealth() {
-        return delegate.getMaxHealth();
-    }
-
-    @Override
-    @Deprecated
-    public void setMaxHealth(double v) {
-        delegate.setMaxHealth(v);
-    }
-
-    @Override
-    @Deprecated
-    public void resetMaxHealth() {
-        delegate.resetMaxHealth();
-    }
-
-    @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> aClass) {
         return delegate.launchProjectile(aClass);
     }
@@ -1963,6 +2082,7 @@ public class User implements Player {
     }
 
     @Override
+    @Deprecated
     public long getLastPlayed() {
         return delegate.getLastPlayed();
     }
@@ -1970,6 +2090,16 @@ public class User implements Player {
     @Override
     public boolean hasPlayedBefore() {
         return delegate.hasPlayedBefore();
+    }
+
+    @Override
+    public long getLastLogin() {
+        return delegate.getLastLogin();
+    }
+
+    @Override
+    public long getLastSeen() {
+        return delegate.getLastSeen();
     }
 
     @Override

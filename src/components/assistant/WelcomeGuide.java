@@ -58,6 +58,8 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
         player.setFlySpeed(0);
         player.setGameMode(GameMode.SPECTATOR);
         welcoming.add(player);
+        player.sendMessage(ChatColor.AQUA + "When you're ready, type " + ChatColor.RESET + "/play" + ChatColor.AQUA +
+                " to begin your adventure.");
     }
 
     @EventHandler

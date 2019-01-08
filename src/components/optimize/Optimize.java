@@ -38,7 +38,6 @@ public class Optimize extends SimpleComponent {
         World overworld = getBornToSurvive().getOverworld();
         overworld.setSpawnLocation(0, overworld.getHighestBlockYAt(0, 0), 0);
         overworld.setGameRule(GameRule.SPAWN_RADIUS, spawnAreaSide / 2);
-        overworld.setGameRule(GameRule.SPECTATORS_GENERATE_CHUNKS, true);
         WorldBorder border = overworld.getWorldBorder();
         double borderSize = spawnAreaSide + 20_000;
         border.setSize(borderSize);

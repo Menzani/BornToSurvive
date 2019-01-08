@@ -1,13 +1,14 @@
 <component name="libraryTable">
   <library name="Paper">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.2.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="https://destroystokyo.com/javadocs" />
+      <root url="https://hub.spigotmc.org/javadocs/spigot" />
+      <root url="https://papermc.io/javadocs" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/server/cache/patched_1.13.2.jar!/" />
     </SOURCES>
   </library>
 </component>
