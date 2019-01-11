@@ -20,13 +20,19 @@ public class Optimize extends SimpleComponent {
     @Override
     public void loadPreWorld() {
         viewDistanceAdjuster = new ViewDistanceAdjuster(this);
+        if (viewDistanceAdjuster.isServerViewDistanceWrong()) {
+            viewDistanceAdjuster = null;
+            return;
+        }
         viewDistanceAdjuster.register();
     }
 
     @Override
     public void load() {
         prepareWorlds();
-        viewDistanceAdjuster.runTaskTimer(Duration.ofMinutes(1));
+        if (viewDistanceAdjuster != null) {
+            viewDistanceAdjuster.runTaskTimer(Duration.ofMinutes(2));
+        }
     }
 
     private void prepareWorlds() {
