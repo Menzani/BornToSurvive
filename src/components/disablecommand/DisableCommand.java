@@ -27,6 +27,15 @@ public class DisableCommand extends SimpleComponent {
     @EventHandler
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         String label = event.getMessage().substring(1);
+        int firstSpace = label.indexOf(' ');
+        if (firstSpace != -1) {
+            label = label.substring(0, firstSpace);
+        }
+        if (label.startsWith("minecraft:")) {
+            label = label.substring(10);
+        } else if (label.startsWith("bukkit:")) {
+            label = label.substring(7);
+        }
         if (isDisabled(label) || consoleOnlyCommandLabels.contains(label)) {
             event.setMessage(label + cancelSuffix);
         }
