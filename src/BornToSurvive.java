@@ -14,6 +14,7 @@ import it.menzani.bts.components.playername.PlayerName;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import it.menzani.bts.components.playerteleport.PlayerTeleport;
 import it.menzani.bts.components.serverview.ServerView;
+import it.menzani.bts.components.suicide.Suicide;
 import it.menzani.bts.components.worldreset.WorldReset;
 import it.menzani.bts.configuration.MainConfiguration;
 import it.menzani.bts.logging.LoggerFactory;
@@ -106,7 +107,8 @@ public class BornToSurvive extends JavaPlugin {
                 new Fix(this),
                 new PlayerName(this),
                 new Assistant(this),
-                new ServerView(this)
+                new ServerView(this),
+                new Suicide(this)
         );
     }
 
