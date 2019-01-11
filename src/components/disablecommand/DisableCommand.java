@@ -10,7 +10,10 @@ import java.util.Set;
 
 public class DisableCommand extends SimpleComponent {
     private static final Set<String> consoleOnlyCommandLabels = Set.of(
-            "plugins", "pl"
+            "plugins", "pl",
+            "me",
+            "version", "ver", "about", "icanhasbukkit",
+            "help", "?"
     );
     private static final Set<String> disabledCommandLabels = Set.of(
             "reload", "rl"
