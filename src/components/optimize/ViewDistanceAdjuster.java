@@ -12,12 +12,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
 class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListener {
     private static final double minTPS = 19.5, goodTPS = 19.8;
-    private static final int minViewDistance = 5, maxViewDistance = 20;
+    private static final int minViewDistance = 10, maxViewDistance = 20;
 
     private final Server server;
+    private final Set<Player> justJoined = new HashSet<>();
     private int viewDistance = maxViewDistance;
 
     ViewDistanceAdjuster(SimpleComponent component) {
@@ -46,9 +49,14 @@ class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListe
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.setViewDistance(viewDistance);
-        ComponentTask task = getComponent().newWrappedRunnableTask(() -> update(player));
-        task.runTaskLater(Duration.ofSeconds(3));
+        justJoined.add(player);
+        ComponentTask task = getComponent().newWrappedRunnableTask(() -> {
+            if (player.isOnline()) {
+                update(player);
+            }
+            justJoined.remove(player);
+        });
+        task.runTaskLater(Duration.ofSeconds(5));
     }
 
     @Override
@@ -60,7 +68,9 @@ class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListe
             viewDistance++;
         }
 
-        server.getOnlinePlayers().forEach(this::update);
+        Set<Player> online = new HashSet<>(server.getOnlinePlayers());
+        online.removeAll(justJoined);
+        online.forEach(this::update);
     }
 
     private void update(Player player) {
