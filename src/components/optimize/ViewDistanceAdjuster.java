@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.time.Duration;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListener {
     private static final double minTPS = 19.5, goodTPS = 19.8;
-    private static final int minViewDistance = 10, maxViewDistance = 20;
+    private static final int minViewDistance = 10, maxViewDistance = 20, netherViewDistance = 7;
 
     private final Server server;
     private final Set<Player> justJoined = new HashSet<>();
@@ -59,6 +60,12 @@ class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListe
         task.runTaskLater(Duration.ofSeconds(5));
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        update(player);
+    }
+
     @Override
     public void run() {
         double tps = server.getTPS()[0];
@@ -74,6 +81,10 @@ class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListe
     }
 
     private void update(Player player) {
+        int viewDistance = this.viewDistance;
+        if (player.getWorld() == getBornToSurvive().getNether()) {
+            viewDistance = Math.min(netherViewDistance, viewDistance);
+        }
         player.setViewDistance(Math.min(player.getClientViewDistance(), viewDistance));
     }
 }
