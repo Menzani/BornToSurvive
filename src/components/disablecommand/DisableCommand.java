@@ -12,6 +12,7 @@ public class DisableCommand extends SimpleComponent {
     private static final Set<String> consoleOnlyCommandLabels = Set.of(
             "plugins", "pl",
             "me",
+            "seed",
             "version", "ver", "about", "icanhasbukkit",
             "help", "?"
     );
