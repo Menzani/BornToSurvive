@@ -18,7 +18,7 @@ import java.util.Set;
 
 class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListener {
     private static final double minTPS = 19.5, goodTPS = 19.8;
-    private static final int minViewDistance = 10, maxViewDistance = 20, netherViewDistance = 7;
+    private static final int minViewDistance = 10, maxViewDistance = 20, netherViewDistance = 8;
 
     private final Server server;
     private final Set<Player> justJoined = new HashSet<>();
@@ -50,6 +50,9 @@ class ViewDistanceAdjuster extends SimpleComponentTask implements ComponentListe
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if (player.getWorld() == getBornToSurvive().getNether()) {
+            player.setViewDistance(netherViewDistance);
+        }
         justJoined.add(player);
         ComponentTask task = getComponent().newWrappedRunnableTask(() -> {
             if (player.isOnline()) {
