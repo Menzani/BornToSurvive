@@ -2,6 +2,7 @@ package it.menzani.bts.components.playerchat;
 
 import it.menzani.bts.BornToSurvive;
 import it.menzani.bts.components.SimpleComponent;
+import it.menzani.bts.components.optimize.Optimize;
 import it.menzani.logger.api.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +19,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class PlayerChat extends SimpleComponent {
-    private static final double nearbyPlayersDistance = 10000; // In blocks
+    private static final double nearbyPlayersDistance = Optimize.borderSize; // In blocks
 
     private NearbyPlayersCache nearbyPlayersCache;
 

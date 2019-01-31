@@ -10,6 +10,7 @@ import java.time.Duration;
 
 public class Optimize extends SimpleComponent {
     private static final int spawnAreaSide = 200_000;
+    public static final double borderSize = spawnAreaSide + 20_000;
 
     private ViewDistanceAdjuster viewDistanceAdjuster;
 
@@ -45,7 +46,6 @@ public class Optimize extends SimpleComponent {
         overworld.setSpawnLocation(0, overworld.getHighestBlockYAt(0, 0), 0);
         overworld.setGameRule(GameRule.SPAWN_RADIUS, spawnAreaSide / 2);
         WorldBorder border = overworld.getWorldBorder();
-        double borderSize = spawnAreaSide + 20_000;
         border.setSize(borderSize);
         border = getBornToSurvive().getNether().getWorldBorder();
         border.setSize(borderSize / 8);
