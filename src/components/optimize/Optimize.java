@@ -5,6 +5,9 @@ import it.menzani.bts.components.SimpleComponent;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.time.Duration;
 
@@ -30,9 +33,20 @@ public class Optimize extends SimpleComponent {
 
     @Override
     public void load() {
+        prepareServer();
         prepareWorlds();
         if (viewDistanceAdjuster != null) {
             viewDistanceAdjuster.runTaskTimer(Duration.ofMinutes(2));
+        }
+    }
+
+    private void prepareServer() {
+        Scoreboard scoreboard = getBornToSurvive().getServer().getScoreboardManager().getMainScoreboard();
+        final String deaths = "deaths";
+        Objective objective = scoreboard.getObjective(deaths);
+        if (objective == null) {
+            objective = scoreboard.registerNewObjective(deaths, "deathCount", deaths);
+            objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
         }
     }
 
