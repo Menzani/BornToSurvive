@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="BTS">
+  <artifact type="jar" name="BTS">
     <output-path>$PROJECT_DIR$/server/plugins</output-path>
     <root id="archive" name="BTS.jar">
       <element id="module-output" name="BornToSurvive" />

@@ -125,7 +125,7 @@ class WelcomeGuide extends SimpleComponentListener implements PlayerExitListener
 
     private void welcome(Player player) {
         assert serverOwner != null;
-        player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getServer().getServerName() +
+        player.sendMessage(ChatColor.AQUA + "Welcome to " + ChatColor.RESET + getBornToSurvive().getDescription().getName() +
                 ChatColor.AQUA + " by " + ChatColor.RESET + serverOwner + ChatColor.AQUA + '!');
         welcoming.remove(player);
     }
