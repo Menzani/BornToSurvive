@@ -1,6 +1,7 @@
 package it.menzani.bts.components.optimize;
 
 import it.menzani.bts.BornToSurvive;
+import it.menzani.bts.components.ComponentTask;
 import it.menzani.bts.components.SimpleComponent;
 import it.menzani.bts.components.playerspawn.PlayerSpawn;
 import org.bukkit.GameRule;
@@ -38,6 +39,8 @@ public class Optimize extends SimpleComponent {
         if (viewDistanceAdjuster != null) {
             viewDistanceAdjuster.runTaskTimer(Duration.ofMinutes(2));
         }
+        ComponentTask task = new Restarter(this);
+        task.runTaskTimer(Duration.ofSeconds(20));
     }
 
     private void prepareServer() {
